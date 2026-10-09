@@ -7,7 +7,7 @@
 
         <a href="{{ url('/') }}" class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 
-            {{ $profile->name ?? 'YOUR NAME' }}
+            {{ $profile->name ?? 'RoshanGauchan' }}
 
         </a>
 

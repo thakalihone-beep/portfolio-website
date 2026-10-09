@@ -7,7 +7,7 @@
 
             © {{ date('Y') }}
 
-            {{ $profile->name ?? 'Your Name' }}.
+            {{ $profile->name ?? 'RoshanGauchan' }}.
 
             All rights reserved.
 
