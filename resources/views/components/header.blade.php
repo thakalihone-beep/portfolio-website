@@ -16,29 +16,29 @@
 
         <nav class="hidden items-center gap-8 md:flex">
 
-            <a href="#home"
+            <a href="/"
                 class="text-sm text-gray-600 transition hover:text-orange-500 dark:text-gray-300 dark:hover:text-orange-400">
                 Home
             </a>
 
-            <a href="#about"
+            <a href="{{ route('about') }}"
                 class="text-sm text-gray-600 transition hover:text-orange-500 dark:text-gray-300 dark:hover:text-orange-400">
                 About
             </a>
 
-            <a href="#projects"
+            <a href="{{ route('projects') }}"
                 class="text-sm text-gray-600 transition hover:text-orange-500 dark:text-gray-300 dark:hover:text-orange-400">
                 Projects
             </a>
 
-            <a href="#skills"
+            <a href="{{ route('skills') }}"
                 class="text-sm text-gray-600 transition hover:text-orange-500 dark:text-gray-300 dark:hover:text-orange-400">
                 Skills
             </a>
 
-            <a href="#contact"
+            <a href="{{ route('blog') }}"
                 class="text-sm text-gray-600 transition hover:text-orange-500 dark:text-gray-300 dark:hover:text-orange-400">
-                Contact
+                Blog
             </a>
 
         </nav>
@@ -80,7 +80,7 @@
 
             <!-- Contact Button -->
 
-            <a href="#contact"
+            <a href="{{ route('contact') }}"
                 class="hidden rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600 sm:block dark:text-black">
 
                 Let's Talk

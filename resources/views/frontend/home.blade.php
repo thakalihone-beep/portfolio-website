@@ -53,7 +53,7 @@
 
             <div class="mt-10 flex flex-wrap gap-4">
 
-                <a href="#projects"
+                <a href="{{ route('projects') }}"
                     class="rounded-full bg-orange-500 px-7 py-3.5 font-semibold text-white transition hover:bg-orange-600 dark:text-black">
 
                     View My Work
@@ -63,7 +63,7 @@
 
                 <!-- CV LINK -->
 
-                <a href="#"
+                <a href="{{ route('about') }}"
                     class="rounded-full border border-gray-300 px-7 py-3.5 font-semibold text-gray-800 transition hover:border-orange-400 hover:text-orange-500 dark:border-white/20 dark:text-white dark:hover:border-orange-400 dark:hover:text-orange-400">
 
                     Download CV
@@ -188,7 +188,7 @@
                 </p>
 
 
-                <a href="#"
+                <a href="{{ route('about') }}"
                     class="mt-7 inline-block font-semibold text-orange-500 transition hover:text-orange-600">
 
                     More About Me →
@@ -231,7 +231,7 @@
             </div>
 
 
-            <a href="#"
+            <a href="{{ route('projects') }}"
                 class="text-sm font-semibold text-gray-500 transition hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400">
 
                 View All Projects →

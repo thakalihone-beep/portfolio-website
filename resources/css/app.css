@@ -8,3 +8,160 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+:root {
+    --page-bg: #f8f6f3;
+    --page-bg-strong: #f2ede8;
+    --panel: rgba(255, 255, 255, 0.88);
+    --panel-alt: #ffffff;
+    --card-border: rgba(15, 23, 42, 0.08);
+    --text: #111827;
+    --text-soft: #4b5563;
+    --text-muted: #6b7280;
+    --accent: #f97316;
+    --accent-strong: #ea580c;
+    --accent-soft: rgba(249, 115, 22, 0.12);
+    --shadow-soft: 0 20px 60px rgba(15, 23, 42, 0.08);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, 0.12), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(251, 146, 60, 0.08), transparent 22%),
+        var(--page-bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+}
+
+.dark body {
+    background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, 0.14), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(234, 88, 12, 0.12), transparent 22%),
+        #0b0b0b;
+    color: #f8fafc;
+}
+
+.page {
+    @apply py-28;
+}
+
+.wrap {
+    @apply mx-auto max-w-6xl px-6;
+}
+
+.eyebrow {
+    @apply mb-5 inline-block text-xs font-semibold uppercase tracking-[0.28em] text-orange-500;
+}
+
+.heading {
+    @apply text-4xl font-black tracking-tight text-slate-900 sm:text-5xl dark:text-white;
+}
+
+.section-heading {
+    @apply text-2xl font-bold text-slate-900 dark:text-white;
+}
+
+.lead {
+    @apply mt-4 max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300;
+}
+
+.muted {
+    @apply mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400;
+}
+
+.grid {
+    @apply mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3;
+}
+
+.two-grid {
+    @apply grid gap-10 lg:grid-cols-2;
+}
+
+.card {
+    @apply rounded-[1.75rem] border border-slate-200/80 bg-white/90 p-7 shadow-[0_18px_50px_rgba(15,23,42,0.06)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-orange-300 hover:shadow-[0_30px_80px_rgba(249,115,22,0.12)] dark:border-white/10 dark:bg-[#121212]/90 dark:shadow-none;
+}
+
+.hero-panel {
+    @apply rounded-[2rem] border border-slate-200 bg-gradient-to-br from-orange-50 to-white p-8 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-white/10 dark:from-orange-500/10 dark:to-[#111111];
+}
+
+.icon-box {
+    @apply mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-500/10 text-2xl text-orange-500 shadow-inner shadow-orange-500/10 dark:bg-orange-500/10;
+}
+
+.tag {
+    @apply mb-2 mr-2 inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-orange-700 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-200;
+}
+
+.actions {
+    @apply mt-7 flex flex-wrap gap-3;
+}
+
+.btn {
+    @apply inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-all duration-200;
+}
+
+.btn-primary {
+    @apply bg-orange-500 text-white shadow-lg shadow-orange-500/20 hover:-translate-y-0.5 hover:bg-orange-600 dark:text-slate-950;
+}
+
+.btn-secondary {
+    @apply border border-slate-200 bg-white text-slate-800 hover:border-orange-200 hover:text-orange-500 dark:border-white/10 dark:bg-[#1a1a1a] dark:text-white dark:hover:border-orange-400/60 dark:hover:text-orange-300;
+}
+
+.field {
+    @apply mb-5;
+}
+
+.field label {
+    @apply mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200;
+}
+
+.field input,
+.field textarea {
+    @apply w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-500/10 dark:border-white/10 dark:bg-[#111111] dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-[#111111];
+}
+
+.field textarea {
+    @apply min-h-[150px] resize-y;
+}
+
+.filter-row {
+    @apply mt-8 flex flex-wrap gap-3;
+}
+
+.filter-btn {
+    @apply inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-orange-200 hover:text-orange-500 dark:border-white/10 dark:bg-[#121212] dark:text-slate-300 dark:hover:border-orange-400/50 dark:hover:text-orange-300;
+}
+
+.filter-btn.active {
+    @apply border-orange-500 bg-orange-500 text-white shadow-lg shadow-orange-500/20 dark:text-slate-950;
+}
+
+.project-card,
+.blog-card {
+    @apply flex h-full flex-col;
+}
+
+.project-card p,
+.blog-card p {
+    @apply mt-4 text-sm leading-7 text-slate-600 dark:text-slate-300;
+}
+
+.project-card .actions,
+.blog-card .actions {
+    @apply mt-auto pt-6;
+}
+
+blockquote,
+pre {
+    @apply overflow-x-auto rounded-2xl bg-slate-100 p-4 text-sm text-slate-700 dark:bg-[#111111] dark:text-slate-200;
+}
+
+::selection {
+    background: rgba(249, 115, 22, 0.25);
+}
