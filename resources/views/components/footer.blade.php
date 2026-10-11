@@ -16,11 +16,11 @@
 
         <div class="flex gap-6">
 
-            <a href="#" class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-300">
+            <a href="https://github.com/thakalihone-beep" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-300">
                 GitHub
             </a>
 
-            <a href="#" class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-300">
+            <a href="https://www.linkedin.com/in/roshan-gauchan-33381b417" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-300">
                 LinkedIn
             </a>
 
@@ -28,7 +28,7 @@
                 Instagram
             </a>
 
-            <a href="mailto:your@email.com" class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-300">
+            <a href="mailto:roshangauchan.thakali01@gmail.com" class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-300">
                 Email
             </a>
 

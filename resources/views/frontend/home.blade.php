@@ -77,7 +77,7 @@
 
             <div class="mt-10 flex items-center gap-5">
 
-                <a href="#" target="_blank"
+                <a href="https://github.com/thakalihone-beep" target="_blank" rel="noopener noreferrer"
                     class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400">
 
                     GitHub
@@ -86,7 +86,7 @@
 
                 <span class="text-gray-300 dark:text-gray-700">/</span>
 
-                <a href="#" target="_blank"
+                <a href="https://www.linkedin.com/in/roshan-gauchan-33381b417" target="_blank" rel="noopener noreferrer"
                     class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400">
 
                     LinkedIn
@@ -95,7 +95,7 @@
 
                 <span class="text-gray-300 dark:text-gray-700">/</span>
 
-                <a href="mailto:your@email.com"
+                <a href="mailto:roshangauchan.thakali01@gmail.com"
                     class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400">
 
                     Email
@@ -438,7 +438,7 @@
         </p>
 
 
-        <a href="mailto:your@email.com"
+        <a href="mailto:roshangauchan.thakali01@gmail.com"
             class="mt-10 inline-flex rounded-full bg-orange-500 px-8 py-4 font-semibold text-white transition hover:bg-orange-600 dark:text-black">
 
             Contact Me →

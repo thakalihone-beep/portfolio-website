@@ -26,24 +26,24 @@
 
                     <div style="margin-top:25px">
                         <p><strong>Email</strong></p>
-                        <a href="mailto:your-email@example.com"
+                        <a href="mailto:roshangauchan.thakali01@gmail.com"
                            style="color:var(--accent)">
-                            your-email@example.com
+                            roshangauchan.thakali01@gmail.com
                         </a>
                     </div>
 
                     <div style="margin-top:20px">
                         <p><strong>GitHub</strong></p>
-                        <a href="https://github.com/your-username"
+                        <a href="https://github.com/thakalihone-beep"
                            target="_blank" rel="noopener noreferrer"
                            style="color:var(--accent)">
-                            github.com/your-username ↗
+                            thakalihone-beep (Roshan Gauchan) ↗
                         </a>
                     </div>
 
                     <div style="margin-top:20px">
                         <p><strong>LinkedIn</strong></p>
-                        <a href="https://www.linkedin.com/"
+                        <a href="https://www.linkedin.com/in/roshan-gauchan-33381b417"
                            target="_blank" rel="noopener noreferrer"
                            style="color:var(--accent)">
                             Connect on LinkedIn ↗
@@ -55,7 +55,7 @@
             <div class="card">
                 <h2 class="section-heading">Send a message</h2>
 
-                <form action="mailto:your-email@example.com"
+                <form action="mailto:roshangauchan.thakali01@gmail.com"
                       method="post" enctype="text/plain">
                     <div class="field">
                         <label for="name">Your name</label>
