@@ -37,52 +37,50 @@
 
     <script>
         const themeToggle = document.getElementById('theme-toggle');
-
         const sunIcon = document.getElementById('sun-icon');
-
         const moonIcon = document.getElementById('moon-icon');
-
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
 
         function updateThemeIcon() {
+            if (!sunIcon || !moonIcon) return;
 
             if (document.documentElement.classList.contains('dark')) {
-
                 moonIcon.classList.remove('hidden');
-
                 sunIcon.classList.add('hidden');
-
             } else {
-
                 moonIcon.classList.add('hidden');
-
                 sunIcon.classList.remove('hidden');
-
             }
-
         }
 
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                const isDark = document.documentElement.classList.toggle('dark');
 
-        themeToggle.addEventListener('click', function() {
+                if (isDark) {
+                    localStorage.theme = 'dark';
+                } else {
+                    localStorage.theme = 'light';
+                }
 
-            const isDark =
-                document.documentElement.classList.toggle('dark');
+                updateThemeIcon();
+            });
+        }
 
+        if (mobileMenuToggle && mobileMenu) {
+            mobileMenuToggle.addEventListener('click', function() {
+                const isExpanded = mobileMenu.classList.toggle('hidden');
+                mobileMenuToggle.setAttribute('aria-expanded', String(!isExpanded));
+            });
 
-            if (isDark) {
-
-                localStorage.theme = 'dark';
-
-            } else {
-
-                localStorage.theme = 'light';
-
-            }
-
-
-            updateThemeIcon();
-
-        });
-
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
 
         updateThemeIcon();
     </script>
