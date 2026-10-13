@@ -8,7 +8,7 @@
 
             <a href="{{ url('/') }}" class="text-lg font-bold tracking-tight text-gray-900 sm:text-xl dark:text-white">
 
-                {{ $profile->name ?? 'RoshanGauchan' }}
+                {{ optional($profile)->name ?? 'RoshanGauchan' }}
 
             </a>
 

@@ -16,4 +16,13 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_homepage_renders_with_default_profile_fallback(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('RoshanGauchan');
+        $response->assertSee('Software Engineer & AI Builder');
+    }
 }

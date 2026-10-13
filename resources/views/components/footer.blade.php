@@ -7,7 +7,7 @@
 
             © {{ date('Y') }}
 
-            {{ $profile->name ?? 'RoshanGauchan' }}.
+            {{ optional($profile)->name ?? 'RoshanGauchan' }}.
 
             All rights reserved.
 

@@ -1,450 +1,137 @@
 @extends('layouts.app')
 @section('content')
-    <section id="home"
-        class="relative flex min-h-screen items-center overflow-hidden bg-white transition-colors duration-300 dark:bg-[#0b0b0b]">
 
+<section id="home" class="nova-hero relative isolate overflow-hidden bg-[#f8f6f3] text-[#17120f] transition-colors duration-500 dark:bg-[#080808] dark:text-white">
 
-    <!-- Background Decorations -->
+    {{-- Atmospheric background --}}
+    <div class="nova-grain pointer-events-none absolute inset-0"></div>
+    <div class="nova-glow nova-glow-a pointer-events-none absolute"></div>
+    <div class="nova-glow nova-glow-b pointer-events-none absolute"></div>
 
-    <div class="absolute -right-40 top-20 h-96 w-96 rounded-full bg-orange-500/10 blur-3xl">
+    {{-- Top editorial label --}}
+    <div class="relative z-20 mx-auto flex max-w-[1600px] items-center justify-between px-6 pt-28 sm:px-10 lg:px-16">
+        <div class="flex items-center gap-3">
+            <span class="h-2 w-2 rounded-full bg-orange-500 shadow-[0_0_15px_#f97316]"></span>
+            <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-500 dark:text-stone-400">
+                Independent Developer / Nepal
+            </span>
+        </div>
+
+        <span class="hidden font-mono text-[10px] tracking-[0.2em] text-stone-400 sm:block">
+            PORTFOLIO — 2026
+        </span>
     </div>
 
-    <div class="absolute -left-40 bottom-20 h-96 w-96 rounded-full bg-orange-500/5 blur-3xl">
-    </div>
+    <div class="relative z-10 mx-auto grid min-h-[720px] max-w-[1600px] items-center gap-2 px-6 pb-20 pt-12 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:px-16 lg:py-12">
 
+        {{-- LEFT: TYPOGRAPHIC HERO --}}
+        <div class="nova-copy relative z-20 py-10 lg:py-16">
 
-    <div class="relative mx-auto grid max-w-7xl items-center gap-16 px-6 pb-20 pt-32 lg:grid-cols-2">
-
-
-        <!-- Hero Content -->
-
-        <div>
-
-            <p class="mb-5 text-sm font-medium uppercase tracking-[0.3em] text-orange-500">
-
-                Hello, I'm
-
+            <p class="mb-7 text-xs font-semibold uppercase tracking-[0.35em] text-orange-600 dark:text-orange-400">
+                Digital craft meets intelligence
             </p>
 
-
-            <h1
-                class="text-5xl font-bold leading-tight tracking-tight text-gray-900 sm:text-6xl lg:text-7xl dark:text-white">
-
-                {{ $profile->name ?? 'Your Name' }}
-
+            <h1 class="nova-title max-w-4xl text-[clamp(3.5rem,8vw,8rem)] font-semibold leading-[0.88] tracking-[-0.075em]">
+                Building
+                <span class="block">what's</span>
+                <span class="nova-title-accent block">next<span class="text-orange-500">.</span></span>
             </h1>
 
+            <div class="mt-9 grid max-w-xl grid-cols-[3px_1fr] gap-5">
+                <div class="rounded-full bg-gradient-to-b from-orange-500 to-orange-500/10"></div>
 
-            <h2 class="mt-5 text-2xl font-semibold text-gray-700 sm:text-3xl dark:text-gray-300">
+                <div>
+                    <h2 class="text-lg font-medium tracking-tight sm:text-xl">
+                        {{ optional($profile)->name ?? 'Your Name' }}
+                        <span class="text-orange-500">—</span>
+                        {{ optional($profile)->headline ?? 'Software Engineer & AI Builder' }}
+                    </h2>
 
-                {{ $profile->headline ?? 'Software Engineer & AI Builder' }}
-
-            </h2>
-
-
-            <p class="mt-6 max-w-xl text-lg leading-8 text-gray-600 dark:text-gray-400">
-
-                {{ $profile->short_bio ?? 'I build modern websites, applications and intelligent software solutions using technology, creativity and problem solving.' }}
-
-            </p>
-
-
-            <!-- Buttons -->
-
-            <div class="mt-10 flex flex-wrap gap-4">
-
-                <a href="{{ route('projects') }}"
-                    class="rounded-full bg-orange-500 px-7 py-3.5 font-semibold text-white transition hover:bg-orange-600 dark:text-black">
-
-                    View My Work
-
-                </a>
-
-
-                <!-- CV LINK -->
-
-                <a href="{{ route('about') }}"
-                    class="rounded-full border border-gray-300 px-7 py-3.5 font-semibold text-gray-800 transition hover:border-orange-400 hover:text-orange-500 dark:border-white/20 dark:text-white dark:hover:border-orange-400 dark:hover:text-orange-400">
-
-                    Download CV
-
-                </a>
-
-            </div>
-
-
-            <!-- Social Links -->
-
-            <div class="mt-10 flex items-center gap-5">
-
-                <a href="https://github.com/thakalihone-beep" target="_blank" rel="noopener noreferrer"
-                    class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400">
-
-                    GitHub
-
-                </a>
-
-                <span class="text-gray-300 dark:text-gray-700">/</span>
-
-                <a href="https://www.linkedin.com/in/roshan-gauchan-33381b417" target="_blank" rel="noopener noreferrer"
-                    class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400">
-
-                    LinkedIn
-
-                </a>
-
-                <span class="text-gray-300 dark:text-gray-700">/</span>
-
-                <a href="mailto:roshangauchan.thakali01@gmail.com"
-                    class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400">
-
-                    Email
-
-                </a>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- Profile Image -->
-
-        <div class="flex justify-center lg:justify-end">
-
-            <div class="relative">
-
-                <div class="absolute inset-0 rounded-3xl bg-orange-500/20 blur-3xl">
+                    <p class="mt-3 max-w-lg text-sm leading-7 text-stone-600 sm:text-base dark:text-stone-400">
+                        {{ optional($profile)->bio ?? 'I build thoughtful digital experiences, intelligent applications and software that turns ambitious ideas into reality.' }}
+                    </p>
                 </div>
-
-
-                <div
-                    class="relative flex h-[420px] w-[350px] items-center justify-center overflow-hidden rounded-3xl border border-gray-200 bg-gray-100 sm:h-[500px] sm:w-[400px] dark:border-white/10 dark:bg-[#151515]">
-
-
-                    @if (isset($profile->profile_image))
-                        <img src="{{ asset('storage/' . $profile->profile_image) }}" alt="{{ $profile->name }}"
-                            class="h-full w-full object-cover">
-                    @else
-                        <div class="text-center">
-
-                            <div
-                                class="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-orange-500/10 text-4xl">
-
-                                👤
-
-                            </div>
-
-                            <p class="text-gray-500">
-                                Your Photo
-                            </p>
-
-                        </div>
-                    @endif
-
-                </div>
-
             </div>
 
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-             ABOUT
-        ====================================================== -->
-
-<section id="about" class="border-t border-gray-200 py-28 transition-colors duration-300 dark:border-white/10">
-
-    <div class="mx-auto max-w-7xl px-6">
-
-        <div class="grid gap-16 lg:grid-cols-2">
-
-            <div>
-
-                <p class="text-sm uppercase tracking-[0.3em] text-orange-500">
-                    About Me
-                </p>
-
-                <h2 class="mt-4 text-4xl font-bold text-gray-900 dark:text-white">
-
-                    Building ideas into real products.
-
-                </h2>
-
-            </div>
-
-
-            <div>
-
-                <p class="leading-8 text-gray-600 dark:text-gray-400">
-
-                    {{ $profile->bio ?? 'I am a software engineering student passionate about software development, artificial intelligence, web development and building real-world technology products.' }}
-
-                </p>
-
-
-                <a href="{{ route('about') }}"
-                    class="mt-7 inline-block font-semibold text-orange-500 transition hover:text-orange-600">
-
-                    More About Me →
-
+            <div class="mt-9 flex flex-wrap items-center gap-4">
+                <a href="{{ route('projects') }}" class="nova-cta group inline-flex items-center gap-8 rounded-full bg-orange-500 px-6 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-orange-600 dark:text-black">
+                    Explore my work
+                    <span class="text-lg transition-transform group-hover:translate-x-1">↗</span>
                 </a>
 
+                <a href="{{ route('about') }}" class="group inline-flex items-center gap-3 px-3 py-4 text-sm font-medium text-stone-600 transition hover:text-orange-500 dark:text-stone-300">
+                    Discover my story
+                    <span class="transition-transform group-hover:translate-x-1">→</span>
+                </a>
+            </div>
+
+            <div class="mt-12 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-stone-300/70 pt-6 text-[11px] uppercase tracking-[0.18em] text-stone-500 dark:border-white/10 dark:text-stone-400">
+                <a href="https://github.com/thakalihone-beep" target="_blank" rel="noopener noreferrer" class="transition hover:text-orange-500">GitHub ↗</a>
+                <span class="text-orange-500">/</span>
+                <a href="https://www.linkedin.com/in/roshan-gauchan-33381b417" target="_blank" rel="noopener noreferrer" class="transition hover:text-orange-500">LinkedIn ↗</a>
+                <span class="text-orange-500">/</span>
+                <a href="mailto:roshangauchan.thakali01@gmail.com" class="transition hover:text-orange-500">Email ↗</a>
             </div>
 
         </div>
 
-    </div>
+        {{-- RIGHT: IMMERSIVE 3D ART DIRECTION --}}
+        <div class="nova-stage relative mx-auto h-[440px] w-full max-w-[700px] sm:h-[570px] lg:h-[700px]">
 
-</section>
-
-
-
-<!-- =====================================================
-             PROJECTS
-        ====================================================== -->
-
-<section id="projects"
-    class="border-t border-gray-200 bg-gray-50 py-28 transition-colors duration-300 dark:border-white/10 dark:bg-[#101010]">
-
-    <div class="mx-auto max-w-7xl px-6">
-
-        <div class="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-
-            <div>
-
-                <p class="text-sm uppercase tracking-[0.3em] text-orange-500">
-                    Selected Work
-                </p>
-
-                <h2 class="mt-4 text-4xl font-bold text-gray-900 dark:text-white">
-
-                    Featured Projects
-
-                </h2>
-
+            <div class="nova-stage-label absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+                <div id="three-hero" class="h-[440px] w-[440px] max-w-[110vw] sm:h-[580px] sm:w-[580px]" aria-label="Interactive animated three-dimensional orange geometric sculpture"></div>
             </div>
 
+            {{-- Technical annotations --}}
+            <div class="nova-hud absolute left-0 top-[14%] z-20">
+                <span class="block font-mono text-[9px] tracking-[0.25em] text-orange-600 dark:text-orange-400">FIG. 001</span>
+                <span class="mt-2 block text-[10px] uppercase tracking-[0.15em] text-stone-500 dark:text-stone-400">Digital matter</span>
+                <span class="mt-1 block font-mono text-[9px] text-stone-400">X / Y / Z</span>
+            </div>
 
-            <a href="{{ route('projects') }}"
-                class="text-sm font-semibold text-gray-500 transition hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400">
+            <div class="nova-hud absolute right-0 top-[25%] z-20 text-right">
+                <span class="block font-mono text-[9px] tracking-[0.2em] text-stone-500 dark:text-stone-400">SYSTEM STATUS</span>
+                <span class="mt-2 flex items-center justify-end gap-2 text-[10px] uppercase tracking-[0.15em]">
+                    <span class="h-1.5 w-1.5 rounded-full bg-orange-500"></span>
+                    Creating
+                </span>
+            </div>
 
-                View All Projects →
+            <div class="nova-coordinate absolute bottom-[12%] left-[8%] z-20 font-mono text-[9px] leading-5 text-stone-400">
+                <span class="block">ENGINE: THREE.JS</span>
+                <span class="block">MODE: INTERACTIVE</span>
+                <span class="block">COLOR: #F97316</span>
+            </div>
 
-            </a>
+            <div class="nova-coordinate absolute bottom-[13%] right-[2%] z-20 text-right">
+                <span class="block text-3xl font-light tracking-tighter text-stone-300 dark:text-white/15">01<span class="text-orange-500">/</span>04</span>
+                <span class="mt-1 block text-[9px] uppercase tracking-[0.2em] text-stone-500 dark:text-stone-400">Explore · Build · Repeat</span>
+            </div>
 
-        </div>
-
-
-
-        <div class="mt-14 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-
-
-            @forelse($projects ?? [] as $project)
-
-                <article
-                    class="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition duration-300 hover:-translate-y-2 hover:border-orange-400 dark:border-white/10 dark:bg-[#151515]">
-
-
-                    <div class="aspect-video overflow-hidden bg-gray-100 dark:bg-[#1c1c1c]">
-
-                        @if ($project->image ?? false)
-                            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}"
-                                class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
-                        @else
-                            <div class="flex h-full items-center justify-center text-gray-500">
-
-                                Project Image
-
-                            </div>
-                        @endif
-
-                    </div>
-
-
-                    <div class="p-6">
-
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">
-
-                            {{ $project->title }}
-
-                        </h3>
-
-
-                        <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-
-                            {{ $project->description }}
-
-                        </p>
-
-
-                        <div class="mt-6 flex gap-5">
-
-                            <a href="#" target="_blank"
-                                class="text-sm font-semibold text-orange-500 hover:text-orange-600">
-
-                                Live Demo →
-
-                            </a>
-
-                            <a href="#" target="_blank"
-                                class="text-sm font-semibold text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-
-                                GitHub →
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            @empty
-
-
-                @foreach (['Project One', 'Project Two', 'Project Three'] as $projectName)
-                    <article
-                        class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-[#151515]">
-
-                        <div
-                            class="flex aspect-video items-center justify-center rounded-xl bg-gray-100 text-gray-500 dark:bg-[#1c1c1c]">
-
-                            Project Image
-
-                        </div>
-
-
-                        <h3 class="mt-6 text-xl font-bold text-gray-900 dark:text-white">
-
-                            {{ $projectName }}
-
-                        </h3>
-
-
-                        <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-
-                            Your project description will appear here.
-
-                        </p>
-
-
-                        <div class="mt-6 flex gap-5">
-
-                            <a href="#" class="text-sm font-semibold text-orange-500">
-
-                                Live Demo →
-
-                            </a>
-
-                            <a href="#" class="text-sm font-semibold text-gray-500 dark:text-gray-400">
-
-                                GitHub →
-
-                            </a>
-
-                        </div>
-
-                    </article>
-                @endforeach
-
-            @endforelse
+            <div class="nova-cross nova-cross-one absolute left-[50%] top-[8%]"></div>
+            <div class="nova-cross nova-cross-two absolute bottom-[8%] left-[50%]"></div>
 
         </div>
 
     </div>
 
-</section>
+    {{-- Bottom technology ticker --}}
+    <div class="relative z-20 border-y border-stone-300/70 dark:border-white/10">
+        <div class="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-5 px-6 py-5 sm:px-10 lg:px-16">
+            <span class="text-[10px] uppercase tracking-[0.25em] text-stone-500 dark:text-stone-400">Working across disciplines</span>
 
-
-
-<!-- =====================================================
-             SKILLS
-        ====================================================== -->
-
-<section id="skills" class="border-t border-gray-200 py-28 transition-colors duration-300 dark:border-white/10">
-
-    <div class="mx-auto max-w-7xl px-6">
-
-        <div class="text-center">
-
-            <p class="text-sm uppercase tracking-[0.3em] text-orange-500">
-                My Expertise
-            </p>
-
-            <h2 class="mt-4 text-4xl font-bold text-gray-900 dark:text-white">
-
-                Technologies I Work With
-
-            </h2>
-
+            <div class="flex flex-wrap gap-x-6 gap-y-3 text-xs font-medium text-stone-600 dark:text-stone-300 sm:gap-x-9">
+                <span>Laravel</span>
+                <span class="text-orange-500">✳</span>
+                <span>Flutter</span>
+                <span class="text-orange-500">✳</span>
+                <span>Python / AI</span>
+                <span class="text-orange-500">✳</span>
+                <span>Three.js</span>
+                <span class="text-orange-500">✳</span>
+                <span>Machine Learning</span>
+            </div>
         </div>
-
-
-        <div class="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-
-            @foreach (['Laravel', 'PHP', 'Python', 'JavaScript', 'Flutter', 'MySQL', 'Machine Learning', 'Deep Learning', 'Git', 'Tailwind CSS', 'Filament', 'Artificial Intelligence'] as $skill)
-                <div
-                    class="rounded-xl border border-gray-200 bg-gray-50 px-5 py-6 text-center transition hover:border-orange-400 hover:bg-white dark:border-white/10 dark:bg-[#111111] dark:hover:bg-[#151515]">
-
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-
-                        {{ $skill }}
-
-                    </span>
-
-                </div>
-            @endforeach
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-             CONTACT
-        ====================================================== -->
-
-<section id="contact"
-    class="border-t border-gray-200 bg-gray-50 py-32 transition-colors duration-300 dark:border-white/10 dark:bg-[#101010]">
-
-    <div class="mx-auto max-w-4xl px-6 text-center">
-
-        <p class="text-sm uppercase tracking-[0.3em] text-orange-500">
-            Get In Touch
-        </p>
-
-
-        <h2 class="mt-5 text-4xl font-bold text-gray-900 sm:text-5xl dark:text-white">
-
-            Let's build something great.
-
-        </h2>
-
-
-        <p class="mx-auto mt-6 max-w-2xl leading-8 text-gray-600 dark:text-gray-400">
-
-            Have a project, idea or opportunity?
-            I'd love to hear about it.
-
-        </p>
-
-
-        <a href="mailto:roshangauchan.thakali01@gmail.com"
-            class="mt-10 inline-flex rounded-full bg-orange-500 px-8 py-4 font-semibold text-white transition hover:bg-orange-600 dark:text-black">
-
-            Contact Me →
-
-        </a>
-
     </div>
 
 </section>

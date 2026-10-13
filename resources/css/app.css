@@ -166,3 +166,194 @@ pre {
 ::selection {
     background: rgba(249, 115, 22, 0.25);
 }
+
+
+
+
+/* ================================================
+   NOVA — ADVANCED PORTFOLIO DESIGN SYSTEM
+================================================ */
+
+.nova-hero {
+    min-height: 100svh;
+    isolation: isolate;
+}
+
+.nova-grain {
+    z-index: 0;
+    opacity: 0.12;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+.dark .nova-grain {
+    opacity: 0.2;
+}
+
+.nova-glow {
+    z-index: 0;
+    width: 32rem;
+    height: 32rem;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.11;
+    pointer-events: none;
+}
+
+.nova-glow-a {
+    top: 8%;
+    right: 8%;
+    background: #f97316;
+}
+
+.nova-glow-b {
+    bottom: 3%;
+    left: -12rem;
+    background: #fb923c;
+    opacity: 0.07;
+}
+
+.dark .nova-glow {
+    opacity: 0.13;
+}
+
+.nova-copy {
+    animation: nova-enter 1s cubic-bezier(.2, .7, .2, 1) both;
+}
+
+.nova-title {
+    text-wrap: balance;
+}
+
+.nova-title-accent {
+    color: #f97316;
+    text-shadow: 0 0 55px rgba(249, 115, 22, 0.12);
+}
+
+.nova-cta {
+    box-shadow: 0 10px 35px rgba(249, 115, 22, 0.16);
+}
+
+.nova-cta:hover {
+    box-shadow: 0 16px 45px rgba(249, 115, 22, 0.25);
+}
+
+.nova-stage {
+    isolation: isolate;
+}
+
+.nova-stage #three-hero {
+    position: relative;
+    max-width: 100%;
+    margin-inline: auto;
+    overflow: visible;
+    touch-action: pan-y;
+    cursor: grab;
+}
+
+.nova-stage #three-hero:active {
+    cursor: grabbing;
+}
+
+.nova-stage #three-hero canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    outline: none;
+}
+
+.nova-hud,
+.nova-coordinate {
+    pointer-events: none;
+    user-select: none;
+}
+
+.nova-hud {
+    animation: nova-enter 1s .25s both;
+}
+
+.nova-cross {
+    width: 12px;
+    height: 12px;
+    opacity: .45;
+}
+
+.nova-cross::before,
+.nova-cross::after {
+    content: "";
+    position: absolute;
+    background: #f97316;
+}
+
+.nova-cross::before {
+    left: 5px;
+    width: 1px;
+    height: 12px;
+}
+
+.nova-cross::after {
+    top: 5px;
+    width: 12px;
+    height: 1px;
+}
+
+.nova-coordinate {
+    font-variant-numeric: tabular-nums;
+}
+
+@keyframes nova-enter {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1023px) {
+    .nova-hero {
+        min-height: auto;
+    }
+
+    .nova-stage {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .nova-stage {
+        height: 390px;
+    }
+
+    .nova-stage #three-hero {
+        height: 390px;
+        width: 390px;
+        max-width: 100%;
+    }
+
+    .nova-hud {
+        font-size: 9px;
+    }
+
+    .nova-coordinate {
+        font-size: 8px;
+    }
+
+    .nova-title {
+        letter-spacing: -0.065em;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nova-copy,
+    .nova-hud {
+        animation: none;
+    }
+
+    .nova-cta {
+        transition: none;
+    }
+}
