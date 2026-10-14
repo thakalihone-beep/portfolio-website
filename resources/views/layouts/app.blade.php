@@ -26,7 +26,7 @@
 
 <body>
 
-    <x-header />
+    {{-- <x-header /> --}}
     <main class="bg-white text-gray-900 transition-colors duration-300 dark:bg-[#0b0b0b] dark:text-white">
         @yield('content')
     </main>
