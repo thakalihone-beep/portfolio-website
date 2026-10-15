@@ -1,13 +1,7 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('content')
 
-{{--
-    IMPORT MAP
-    Needed so three.js addons (EffectComposer, bloom, etc.) can resolve `three`.
-    If your layout loads a module script (e.g. @vite) in <head> BEFORE this point,
-    move this <script type="importmap"> block into the layout <head>, above @vite.
---}}
 <script type="importmap">
 {
     "imports": {
@@ -2864,4 +2858,4 @@
         window.addEventListener('pagehide', cleanup, { once: true });
     })();
 </script>
-@endsection
+@endsection --}}
