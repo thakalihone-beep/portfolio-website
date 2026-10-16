@@ -8,7 +8,7 @@ class PageController extends Controller
 {
     public function index(): View
     {
-        return view('frontend.portfolio-rocket-pilot');
+        return view('frontend.portfolio-rocket');
     }
 
     public function about(): View
