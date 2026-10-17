@@ -1,39 +1,20 @@
-<footer class="border-t border-gray-200 bg-white transition-colors duration-300 dark:border-white/10 dark:bg-[#0b0b0b]">
-
-    <div class="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-8 md:flex-row md:items-center md:justify-between">
-
-
-        <p class="text-sm text-gray-500 dark:text-gray-300">
-
-            © {{ date('Y') }}
-
-            {{ optional($profile)->name ?? 'RoshanGauchan' }}.
-
-            All rights reserved.
-
-        </p>
-
-
-        <div class="flex gap-6">
-
-            <a href="https://github.com/thakalihone-beep" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-300">
-                GitHub
-            </a>
-
-            <a href="https://www.linkedin.com/in/roshan-gauchan-33381b417" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-300">
-                LinkedIn
-            </a>
-
-            <a href="#" class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-300">
-                Instagram
-            </a>
-
-            <a href="mailto:roshangauchan.thakali01@gmail.com" class="text-sm text-gray-500 transition hover:text-orange-500 dark:text-gray-300">
-                Email
-            </a>
-
+﻿<footer class="site-footer">
+    <div class="site-footer-inner mx-auto max-w-7xl px-6 py-8 sm:px-8 sm:py-10">
+        <div>
+            <a href="{{ route('home') }}" class="site-footer-brand">RG<span>.</span></a>
+            <p class="site-footer-note">Independent digital systems · Nepal</p>
         </div>
 
-    </div>
+        <nav class="site-footer-links" aria-label="Footer navigation">
+            <a href="{{ route('about') }}">About</a>
+            <a href="{{ route('projects') }}">Projects</a>
+            <a href="{{ route('skills') }}">Skills</a>
+            <a href="{{ route('blog') }}">Journal</a>
+            <a href="{{ route('contact') }}">Contact</a>
+            <a href="https://github.com/thakalihone-beep" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+            <a href="https://www.linkedin.com/in/roshan-gauchan-33381b417" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+        </nav>
 
+        <p class="site-footer-copy">© {{ date('Y') }} {{ optional($profile)->name ?? 'Roshan Gauchan' }}. Built with curiosity and care.</p>
+    </div>
 </footer>

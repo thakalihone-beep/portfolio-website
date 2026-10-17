@@ -55,42 +55,51 @@
             <div class="card">
                 <h2 class="section-heading">Send a message</h2>
 
-                <form action="mailto:roshangauchan.thakali01@gmail.com"
-                      method="post" enctype="text/plain">
+                @if (session('status'))
+                    <p class="muted" role="status">{{ session('status') }}</p>
+                @endif
+
+                @if ($errors->any())
+                    <p class="muted" role="alert">Please correct the highlighted fields and try again.</p>
+                @endif
+
+                <form action="{{ route('contact.store') }}" method="post">
+                    @csrf
                     <div class="field">
                         <label for="name">Your name</label>
-                        <input id="name" name="Name" type="text"
-                               placeholder="Enter your name" required>
+                           <input id="name" name="name" type="text"
+                               value="{{ old('name') }}" maxlength="255"
+                               autocomplete="name" required>
+                        @error('name') <small class="muted">{{ $message }}</small> @enderror
                     </div>
 
                     <div class="field">
                         <label for="email">Email address</label>
-                        <input id="email" name="Email" type="email"
-                               placeholder="you@example.com" required>
+                        <input id="email" name="email" type="email"
+                               value="{{ old('email') }}" maxlength="255"
+                               autocomplete="email" placeholder="you@example.com" required>
+                        @error('email') <small class="muted">{{ $message }}</small> @enderror
                     </div>
 
                     <div class="field">
                         <label for="subject">Subject</label>
-                        <input id="subject" name="Subject" type="text"
+                        <input id="subject" name="subject" type="text"
+                               value="{{ old('subject') }}" maxlength="255"
                                placeholder="What is this about?" required>
+                        @error('subject') <small class="muted">{{ $message }}</small> @enderror
                     </div>
 
                     <div class="field">
                         <label for="message">Message</label>
-                        <textarea id="message" name="Message"
-                                  placeholder="Tell me about your idea..."
-                                  required></textarea>
+                        <textarea id="message" name="message" maxlength="5000"
+                                  placeholder="Tell me about your idea..." required>{{ old('message') }}</textarea>
+                        @error('message') <small class="muted">{{ $message }}</small> @enderror
                     </div>
 
                     <button type="submit" class="btn btn-primary">
                         Send Message ↗
                     </button>
 
-                    <p class="muted" style="font-size:12px">
-                        This demo uses your visitor's email application.
-                        A Laravel-powered contact form should be used for
-                        reliable delivery and database storage.
-                    </p>
                 </form>
             </div>
         </div>

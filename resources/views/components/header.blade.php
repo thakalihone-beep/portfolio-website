@@ -1,4 +1,4 @@
-<header
+﻿<header
     class="fixed left-0 right-0 top-0 z-50 border-b border-gray-200/80 bg-white/80 backdrop-blur-xl transition-colors duration-300 dark:border-white/10 dark:bg-[#0b0b0b]/80">
 
     <div class="mx-auto max-w-7xl px-4 sm:px-6">
@@ -17,27 +17,27 @@
 
             <nav class="hidden items-center gap-8 md:flex">
 
-                <a href="/"
+                <a href="/" @if(request()->routeIs('home')) aria-current="page" @endif
                     class="text-sm text-gray-600 transition hover:text-orange-500 dark:text-gray-300 dark:hover:text-orange-400">
                     Home
                 </a>
 
-                <a href="{{ route('about') }}"
+                <a href="{{ route('about') }}" @if(request()->routeIs('about')) aria-current="page" @endif
                     class="text-sm text-gray-600 transition hover:text-orange-500 dark:text-gray-300 dark:hover:text-orange-400">
                     About
                 </a>
 
-                <a href="{{ route('projects') }}"
+                <a href="{{ route('projects') }}" @if(request()->routeIs('projects')) aria-current="page" @endif
                     class="text-sm text-gray-600 transition hover:text-orange-500 dark:text-gray-300 dark:hover:text-orange-400">
                     Projects
                 </a>
 
-                <a href="{{ route('skills') }}"
+                <a href="{{ route('skills') }}" @if(request()->routeIs('skills')) aria-current="page" @endif
                     class="text-sm text-gray-600 transition hover:text-orange-500 dark:text-gray-300 dark:hover:text-orange-400">
                     Skills
                 </a>
 
-                <a href="{{ route('blog') }}"
+                <a href="{{ route('blog') }}" @if(request()->routeIs('blog', 'blog.show')) aria-current="page" @endif
                     class="text-sm text-gray-600 transition hover:text-orange-500 dark:text-gray-300 dark:hover:text-orange-400">
                     Blog
                 </a>
@@ -81,7 +81,7 @@
 
                 <!-- Contact Button -->
 
-                <a href="{{ route('contact') }}"
+                <a href="{{ route('contact') }}" @if(request()->routeIs('contact')) aria-current="page" @endif
                     class="hidden rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600 sm:block dark:text-black">
 
                     Let's Talk
@@ -104,12 +104,12 @@
 
     <nav id="mobile-menu" class="hidden border-t border-gray-200 bg-white/95 px-4 py-4 shadow-lg backdrop-blur-xl md:hidden dark:border-white/10 dark:bg-[#0b0b0b]/95">
         <div class="flex flex-col gap-3">
-            <a href="/" class="rounded-lg px-2 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-orange-400">Home</a>
-            <a href="{{ route('about') }}" class="rounded-lg px-2 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-orange-400">About</a>
-            <a href="{{ route('projects') }}" class="rounded-lg px-2 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-orange-400">Projects</a>
-            <a href="{{ route('skills') }}" class="rounded-lg px-2 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-orange-400">Skills</a>
-            <a href="{{ route('blog') }}" class="rounded-lg px-2 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-orange-400">Blog</a>
-            <a href="{{ route('contact') }}" class="mt-2 inline-flex items-center justify-center rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600 dark:text-black">Let's Talk</a>
+            <a href="/" @if(request()->routeIs('home')) aria-current="page" @endif class="rounded-lg px-2 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-orange-400">Home</a>
+            <a href="{{ route('about') }}" @if(request()->routeIs('about')) aria-current="page" @endif class="rounded-lg px-2 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-orange-400">About</a>
+            <a href="{{ route('projects') }}" @if(request()->routeIs('projects')) aria-current="page" @endif class="rounded-lg px-2 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-orange-400">Projects</a>
+            <a href="{{ route('skills') }}" @if(request()->routeIs('skills')) aria-current="page" @endif class="rounded-lg px-2 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-orange-400">Skills</a>
+            <a href="{{ route('blog') }}" @if(request()->routeIs('blog', 'blog.show')) aria-current="page" @endif class="rounded-lg px-2 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-orange-400">Blog</a>
+            <a href="{{ route('contact') }}" @if(request()->routeIs('contact')) aria-current="page" @endif class="mt-2 inline-flex items-center justify-center rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600 dark:text-black">Let's Talk</a>
         </div>
     </nav>
 

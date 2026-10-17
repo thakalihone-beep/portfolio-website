@@ -10,116 +10,52 @@
         <span class="eyebrow">Things I've built</span>
         <h1 class="heading">Featured Projects<span style="color:var(--accent)">.</span></h1>
         <p class="lead">
-            A collection of applications, experiments, and projects
-            created while learning and building.
+            Selected applications and experiments from my work.
         </p>
 
-        <div class="filter-row" id="project-filters">
-            <button class="filter-btn active" data-filter="all">All Projects</button>
-            <button class="filter-btn" data-filter="web">Web Development</button>
-            <button class="filter-btn" data-filter="app">Applications</button>
-            <button class="filter-btn" data-filter="ai">AI / ML</button>
-        </div>
+        @if ($projects->isEmpty())
+            <p class="muted" role="status">No projects have been published yet.</p>
+        @else
+            <div class="grid" id="project-grid">
+                @foreach ($projects as $project)
+                    <article class="card project-card">
+                        @if ($project->featured)
+                            <span class="tag">Featured</span>
+                        @endif
 
-        <div class="grid" id="project-grid">
-            <article class="card project-card" data-category="web">
-                <div class="icon-box">🛒</div>
-                <span class="tag">Web Development</span>
-                <h2 class="section-heading" style="margin-top:12px">Haatify</h2>
-                <p>
-                    An ecommerce platform concept with product listings,
-                    categories, cart, orders, and an admin panel.
-                </p>
-                <div>
-                    <span class="tag">Laravel</span>
-                    <span class="tag">MySQL</span>
-                    <span class="tag">PHP</span>
-                </div>
-                <div class="actions">
-                    <a class="btn btn-secondary"
-                       href="https://github.com/" target="_blank"
-                       rel="noopener noreferrer">GitHub ↗</a>
-                </div>
-            </article>
+                        <h2 class="section-heading" style="margin-top:12px">{{ $project->title }}</h2>
 
-            <article class="card project-card" data-category="app">
-                <div class="icon-box">📱</div>
-                <span class="tag">Application</span>
-                <h2 class="section-heading" style="margin-top:12px">Orvi Task</h2>
-                <p>
-                    A task management application concept focused on
-                    organizing activities and improving productivity.
-                </p>
-                <div>
-                    <span class="tag">Flutter</span>
-                    <span class="tag">Dart</span>
-                </div>
-                <div class="actions">
-                    <a class="btn btn-secondary"
-                       href="https://github.com/" target="_blank"
-                       rel="noopener noreferrer">GitHub ↗</a>
-                </div>
-            </article>
+                        @if ($project->short_description)
+                            <p>{{ $project->short_description }}</p>
+                        @endif
 
-            <article class="card project-card" data-category="web">
-                <div class="icon-box">👨‍💻</div>
-                <span class="tag">Web Development</span>
-                <h2 class="section-heading" style="margin-top:12px">Developer Portfolio</h2>
-                <p>
-                    A personal website showcasing my background, skills,
-                    projects, articles, and contact information.
-                </p>
-                <div>
-                    <span class="tag">Laravel</span>
-                    <span class="tag">Blade</span>
-                    <span class="tag">CSS</span>
-                </div>
-                <div class="actions">
-                    <a class="btn btn-primary" href="{{ route('about') }}">
-                        View Website ↗
-                    </a>
-                </div>
-            </article>
+                        @if ($project->technologies->isNotEmpty())
+                            <div class="mt-5">
+                                @foreach ($project->technologies as $technology)
+                                    <span class="tag">{{ $technology->name }}</span>
+                                @endforeach
+                            </div>
+                        @endif
 
-            <article class="card project-card" data-category="ai">
-                <div class="icon-box">🧠</div>
-                <span class="tag">AI / ML</span>
-                <h2 class="section-heading" style="margin-top:12px">AI Learning Lab</h2>
-                <p>
-                    A place to develop small experiments in data analysis,
-                    prediction, and machine learning.
-                </p>
-                <div>
-                    <span class="tag">Python</span>
-                    <span class="tag">Pandas</span>
-                    <span class="tag">ML</span>
-                </div>
-                <div class="actions">
-                    <a class="btn btn-secondary"
-                       href="https://github.com/" target="_blank"
-                       rel="noopener noreferrer">GitHub ↗</a>
-                </div>
-            </article>
-        </div>
+                        @if ($project->github_url || $project->live_url || $project->demo_url)
+                            <div class="actions">
+                                @if ($project->github_url)
+                                    <a class="btn btn-secondary" href="{{ $project->github_url }}" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                                @endif
+                                @if ($project->live_url)
+                                    <a class="btn btn-primary" href="{{ $project->live_url }}" target="_blank" rel="noopener noreferrer">Live Site ↗</a>
+                                @endif
+                                @if ($project->demo_url)
+                                    <a class="btn btn-secondary" href="{{ $project->demo_url }}" target="_blank" rel="noopener noreferrer">Demo ↗</a>
+                                @endif
+                            </div>
+                        @endif
+                    </article>
+                @endforeach
+            </div>
+
+            <div class="mt-8">{{ $projects->links() }}</div>
+        @endif
     </div>
 </section>
-
-<script>
-    document.querySelectorAll('#project-filters .filter-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            document.querySelectorAll('#project-filters .filter-btn')
-                .forEach(item => item.classList.remove('active'));
-
-            button.classList.add('active');
-
-            const filter = button.dataset.filter;
-
-            document.querySelectorAll('#project-grid .project-card')
-                .forEach(card => {
-                    card.hidden = filter !== 'all'
-                        && card.dataset.category !== filter;
-                });
-        });
-    });
-</script>
 @endsection

@@ -12,7 +12,7 @@
         <div class="two-grid" style="align-items:center; margin-top:16px">
             <div>
                 <h1 class="heading">
-                    Hello, I'm <span style="color:var(--accent)">Your Name.</span>
+                    Hello, I'm <span style="color:var(--accent)">{{ optional($profile)->name ?? 'RoshanGauchan' }}.</span>
                 </h1>
 
                 <h2 class="section-heading">Software Engineering Student & Aspiring AI Builder</h2>

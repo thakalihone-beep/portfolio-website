@@ -14,121 +14,43 @@
             project lessons, and explorations in artificial intelligence.
         </p>
 
-        <div class="field" style="max-width:520px; margin-top:30px">
-            <label for="blog-search">Search articles</label>
-            <input id="blog-search" type="search"
-                   placeholder="Search Laravel, Python, AI...">
-        </div>
+        <form action="{{ route('blog') }}" method="get" class="field" style="max-width:520px; margin-top:30px">
+            <label for="blog-search">Search published articles</label>
+            <div class="flex gap-3">
+                <input id="blog-search" name="search" type="search"
+                       value="{{ $search }}" maxlength="100"
+                       placeholder="Search articles...">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
 
-        <div class="filter-row" id="blog-filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="programming">Programming</button>
-            <button class="filter-btn" data-filter="laravel">Laravel</button>
-            <button class="filter-btn" data-filter="ai">AI / ML</button>
-        </div>
+        @if ($posts->isEmpty())
+            <p class="muted" role="status">
+                {{ $search ? 'No published articles match your search.' : 'No articles have been published yet.' }}
+            </p>
+        @else
+            <div class="grid" id="blog-grid">
+                @foreach ($posts as $post)
+                    <article class="card blog-card">
+                        <span class="tag">{{ $post->category?->name ?? 'Journal' }}</span>
+                        <h2 class="section-heading" style="margin-top:12px">{{ $post->title }}</h2>
+                        @if ($post->excerpt)
+                            <p>{{ $post->excerpt }}</p>
+                        @endif
+                        <p class="muted">
+                            {{ $post->published_at?->format('M j, Y') ?? 'Published' }}
+                        </p>
+                        <div class="actions">
+                            <a class="btn btn-secondary" href="{{ route('blog.show', $post->slug) }}">
+                                Read Article ↗
+                            </a>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
 
-        <div class="grid" id="blog-grid">
-            <article class="card blog-card"
-                     data-category="laravel"
-                     data-search="laravel models migrations database">
-                <div class="icon-box">⚙️</div>
-                <span class="tag">Laravel</span>
-                <h2 class="section-heading" style="margin-top:12px">
-                    Understanding Laravel Models and Migrations
-                </h2>
-                <p>
-                    Learn how Eloquent models, database tables, and
-                    migrations work together in a Laravel application.
-                </p>
-                <p class="muted">Beginner · 6 min read</p>
-                <a class="btn btn-secondary" href="#"
-                   onclick="event.preventDefault(); alert('Connect this article to your blog post detail page.');">
-                    Read Article ↗
-                </a>
-            </article>
-
-            <article class="card blog-card"
-                     data-category="programming"
-                     data-search="python programming beginner variables functions">
-                <div class="icon-box">🐍</div>
-                <span class="tag">Programming</span>
-                <h2 class="section-heading" style="margin-top:12px">
-                    Building Strong Programming Foundations
-                </h2>
-                <p>
-                    Why variables, conditions, loops, functions, and
-                    problem-solving matter for every developer.
-                </p>
-                <p class="muted">Beginner · 5 min read</p>
-                <a class="btn btn-secondary" href="#"
-                   onclick="event.preventDefault(); alert('Connect this article to your blog post detail page.');">
-                    Read Article ↗
-                </a>
-            </article>
-
-            <article class="card blog-card"
-                     data-category="ai"
-                     data-search="machine learning deep learning generative ai">
-                <div class="icon-box">🤖</div>
-                <span class="tag">AI / ML</span>
-                <h2 class="section-heading" style="margin-top:12px">
-                    Machine Learning vs Deep Learning
-                </h2>
-                <p>
-                    Explore the relationship between machine learning,
-                    neural networks, deep learning, and generative AI.
-                </p>
-                <p class="muted">AI / ML · 8 min read</p>
-                <a class="btn btn-secondary" href="#"
-                   onclick="event.preventDefault(); alert('Connect this article to your blog post detail page.');">
-                    Read Article ↗
-                </a>
-            </article>
-        </div>
-
-        <p id="blog-empty" class="muted" hidden>
-            No matching articles found. Try another search.
-        </p>
+            <div class="mt-8">{{ $posts->links() }}</div>
+        @endif
     </div>
 </section>
-
-<script>
-    const searchInput = document.getElementById('blog-search');
-    const blogCards = [...document.querySelectorAll('#blog-grid .blog-card')];
-    const blogButtons = [...document.querySelectorAll('#blog-filters .filter-btn')];
-    let selectedCategory = 'all';
-
-    function filterBlogs() {
-        const query = searchInput.value.toLowerCase().trim();
-        let visible = 0;
-
-        blogCards.forEach(card => {
-            const categoryMatch = selectedCategory === 'all'
-                || card.dataset.category === selectedCategory;
-
-            const searchMatch = card.dataset.search.includes(query)
-                || card.innerText.toLowerCase().includes(query);
-
-            const show = categoryMatch && searchMatch;
-            card.hidden = !show;
-
-            if (show) visible++;
-        });
-
-        document.getElementById('blog-empty').hidden = visible !== 0;
-    }
-
-    searchInput.addEventListener('input', filterBlogs);
-
-    blogButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            selectedCategory = button.dataset.filter;
-
-            blogButtons.forEach(item => item.classList.remove('active'));
-            button.classList.add('active');
-
-            filterBlogs();
-        });
-    });
-</script>
 @endsection

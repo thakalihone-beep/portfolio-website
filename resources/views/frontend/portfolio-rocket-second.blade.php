@@ -2,6 +2,22 @@
 
 @section('content')
 
+@php
+    // Each entry becomes a planet. Edit the text, colours and positions freely.
+    $sites = [
+        ['key' => 'about', 'title' => 'ABOUT ME', 'tag' => 'PLANET 01 / WHO I AM', 'url' => route('about'), 'color' => '#7aa2ff', 'r' => 3.6, 'pos' => [-22, 7, -18], 'ring' => false,
+         'info' => ['Roshan Gauchan, based in Nepal', 'Starting a BE in Software Engineering', 'Building real products before the degree began']],
+        ['key' => 'projects', 'title' => 'PROJECTS', 'tag' => 'PLANET 02 / WHAT I BUILT', 'url' => route('projects'), 'color' => '#ff782e', 'r' => 4.4, 'pos' => [24, 9, -22], 'ring' => true,
+         'info' => ['NewsHub: a Laravel-based Nepali news portal', 'Multi-vendor marketplace with Nepal payment gateways', 'Case studies and design work inside']],
+        ['key' => 'skills', 'title' => 'SKILLS', 'tag' => 'PLANET 03 / MY TOOLKIT', 'url' => route('skills'), 'color' => '#3fd6b0', 'r' => 3.2, 'pos' => [-30, 12, 10], 'ring' => true,
+         'info' => ['Laravel, Blade and Tailwind CSS', 'Three.js and creative web', 'UX, graphic design and photography']],
+        ['key' => 'blog', 'title' => 'BLOG', 'tag' => 'PLANET 04 / WRITING', 'url' => route('blog'), 'color' => '#c58cff', 'r' => 3.0, 'pos' => [30, 6, 14], 'ring' => false,
+         'info' => ['Notes on building, design and code', 'Write-ups from real projects']],
+        ['key' => 'contact', 'title' => 'CONTACT', 'tag' => 'PLANET 05 / SAY HELLO', 'url' => route('contact'), 'color' => '#ffd166', 'r' => 3.8, 'pos' => [2, 16, -38], 'ring' => false,
+         'info' => ['Have an idea? Start a project together', 'Find me through the contact page']],
+    ];
+@endphp
+
 {{--
     IMPORT MAP
     Needed so three.js addons (EffectComposer, bloom, etc.) can resolve `three`.
@@ -37,6 +53,7 @@
             <span>WORLD ONLINE</span>
             <span class="status-divider">/</span>
             <span id="scene-clock">00:00:00</span>
+            <button id="rocket-reset" type="button" aria-label="Return rocket to starting position" title="Return rocket to starting position">↻</button>
         </div>
     </header>
 
@@ -115,7 +132,7 @@
         </div>
 
         <div class="bottom-center" id="interaction-hint">
-            MOVE TO DISTORT <span>·</span> DRAG TO ORBIT <span>·</span> CLICK THE SPIRE TO LAUNCH <span>·</span> KEYS 1–4
+            MOVE TO DISTORT <span>·</span> DRAG TO ORBIT <span>·</span> CLICK THE ROCKET TO LAUNCH <span>·</span> FLY TO A PLANET <span>·</span> L TO LAND <span>·</span> KEYS 1–4
         </div>
 
         <div class="bottom-right">
@@ -134,10 +151,37 @@
         <span class="cursor-label"></span>
     </div>
 
+    <a class="scroll-cue" href="#work" aria-label="Skip the 3D world and jump to my work">
+        <span>Skip to my work</span><i></i>
+    </a>
+
     <div id="launch-readout" aria-live="polite">
         <span id="lr-phase">READY</span>
         <span id="lr-count">CLICK THE SPIRE TO LAUNCH</span>
         <span id="lr-data"><span id="lr-alt">ALT 000 M</span><span id="lr-vel">VEL 000 M/S</span></span>
+    </div>
+
+    <div id="pilot-panel" aria-hidden="true">
+        <div class="pilot-radar-wrap"><canvas id="pilot-radar" width="240" height="240"></canvas><span class="radar-tag">RADAR</span></div>
+        <ul class="pilot-keys">
+            <li><b>LEFT DRAG</b><span>LOOK AROUND</span></li>
+            <li><b>RIGHT DRAG</b><span>STEER</span></li>
+            <li><b>W/A/S/D · ARROWS</b><span>FLY</span></li>
+            <li><b>SHIFT</b><span>BOOST</span></li>
+            <li><b>SPACE</b><span>BRAKE</span></li>
+            <li><b>L</b><span>LAND</span></li>
+            <li><b>E</b><span>OPEN PAGE</span></li>
+        </ul>
+    </div>
+
+    <div id="site-card" aria-live="polite" aria-hidden="true">
+        <span class="sc-kicker" id="sc-kicker"></span>
+        <h3 id="sc-title"></h3>
+        <ul id="sc-info"></ul>
+        <div class="sc-actions">
+            <button id="sc-land" type="button">LAND <kbd>L</kbd></button>
+            <a id="sc-open" href="#">OPEN PAGE <kbd>E</kbd></a>
+        </div>
     </div>
 
     <div id="cathedral-loader" aria-live="polite">
@@ -151,7 +195,69 @@
 
 </section>
 
+{{-- ===== Below the fold: fast, scannable content for visitors who skip the 3D world ===== --}}
+<section id="work" class="pd" aria-label="Selected work">
+    <div class="pd-wrap">
+
+        <div class="pd-head" data-reveal>
+            <h2>Real products, built with Laravel and careful design.</h2>
+            <p>The world above is the playful version. Here is the quick version: what I build, what I use, and how to reach me.</p>
+        </div>
+
+        <ul class="pd-projects" data-reveal>
+            <li>
+                <a href="{{ route('projects') }}">
+                    <span class="pd-name">NewsHub</span>
+                    <span class="pd-desc">A Laravel-based Nepali news portal, with a full frontend redesign.</span>
+                    <span class="pd-stack">Laravel · Blade · Tailwind CSS</span>
+                    <span class="pd-go" aria-hidden="true">View case study</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('projects') }}">
+                    <span class="pd-name">Multi-vendor marketplace</span>
+                    <span class="pd-desc">An online marketplace with payment gateways built for Nepal.</span>
+                    <span class="pd-stack">Laravel · Payments · Vendor dashboards</span>
+                    <span class="pd-go" aria-hidden="true">View case study</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="pd-split" data-reveal>
+            <div>
+                <h3>Toolkit</h3>
+                <ul class="pd-chips">
+                    @foreach (['Laravel', 'Blade', 'Tailwind CSS', 'Three.js', 'UX design', 'Graphic design', 'Photography'] as $skill)
+                        <li>{{ $skill }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            <div>
+                <h3>Explore the site</h3>
+                <ul class="pd-links">
+                    @foreach ($sites as $site)
+                        <li style="--c: {{ $site['color'] }}">
+                            <a href="{{ $site['url'] }}"><i aria-hidden="true"></i>{{ ucfirst(strtolower($site['title'])) }}<small>{{ $site['info'][0] }}</small></a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+
+        <a class="pd-cta" href="{{ route('contact') }}" data-reveal>
+            <span>Have an idea? Let's build it together.</span>
+            <b>Start a project</b>
+        </a>
+    </div>
+</section>
+
 <style>
+    #computational-cathedral *,
+    #computational-cathedral *::before,
+    #computational-cathedral *::after {
+        box-sizing: border-box;
+    }
+
     #computational-cathedral {
         --void: #050606;
         --white: #eeeae2;
@@ -241,6 +347,7 @@
     }
 
     .cathedral-header a,
+    .cathedral-header button,
     .cathedral-index button,
     .enter-world {
         pointer-events: auto;
@@ -322,6 +429,30 @@
         color: var(--orange);
     }
 
+    #rocket-reset {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border: 1px solid rgba(238,234,226,.24);
+        border-radius: 50%;
+        background: transparent;
+        color: var(--white);
+        font: inherit;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        transition: color .25s ease, border-color .25s ease, background .25s ease, transform .25s ease;
+    }
+
+    #rocket-reset:hover {
+        transform: rotate(-45deg);
+        border-color: var(--orange);
+        background: rgba(255,120,46,.1);
+        color: var(--orange);
+    }
+
     .cathedral-index {
         right: clamp(20px, 4vw, 64px);
         top: 50%;
@@ -348,7 +479,7 @@
         color: rgba(238,234,226,.4);
         text-align: left;
         cursor: pointer;
-        transition: color .3s ease, padding .3s ease, translate .25s ease;
+        transition: color .3s ease, padding .3s ease, translate .25s ease, border-color .3s ease;
     }
 
     .world-marker span {
@@ -369,6 +500,11 @@
         color: var(--white);
     }
 
+    .world-marker:hover {
+        padding-left: 5px;
+        border-bottom-color: rgba(255,120,46,.48);
+    }
+
     .world-marker.is-active::before {
         width: 20px;
     }
@@ -379,7 +515,8 @@
 
     .world-marker:focus-visible,
     .enter-world:focus-visible,
-    .cathedral-brand:focus-visible {
+    .cathedral-brand:focus-visible,
+    #rocket-reset:focus-visible {
         outline: 1px solid var(--orange);
         outline-offset: 6px;
     }
@@ -539,6 +676,7 @@
         color: var(--orange);
         font-size: 16px;
         transition: transform .3s ease, background .3s ease;
+        box-shadow: 0 0 24px rgba(255,120,46,.08);
     }
 
     .enter-world:hover .enter-icon {
@@ -961,14 +1099,47 @@
         }
     }
     .cathedral-intro { transition: filter .7s ease; }
-    #computational-cathedral.is-launching .cathedral-intro { filter: opacity(.12); }
+    #computational-cathedral.has-readout .cathedral-intro { filter: opacity(.12); }
     #launch-readout {
         position: absolute; z-index: 4; pointer-events: none;
         left: clamp(22px, 8.3vw, 130px); bottom: 84px;
-        display: grid; gap: 7px; font-size: 9px; font-weight: 500;
+        display: grid; gap: 7px; padding: 12px 15px;
+        border-left: 1px solid rgba(255,120,46,.65);
+        background: linear-gradient(90deg, rgba(8,10,10,.76), transparent);
+        font-size: 9px; font-weight: 500;
         letter-spacing: .19em; color: var(--muted);
+        opacity: 0; visibility: hidden; transform: translateY(8px);
+        transition: opacity .3s ease, transform .3s ease, visibility .3s ease;
+    }
+    #computational-cathedral.has-readout #launch-readout {
+        opacity: 1; visibility: visible; transform: none;
     }
     #lr-phase { color: var(--orange); }
+
+    /* ---- Pilot HUD ---- */
+    #pilot-panel {
+        position: absolute; right: 28px; bottom: 96px; z-index: 7;
+        display: flex; flex-direction: column; gap: 12px; width: 190px;
+        padding: 14px; border: 1px solid var(--line); border-radius: 18px;
+        background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.015));
+        backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%);
+        box-shadow: 0 20px 60px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,120,46,.08);
+        opacity: 0; transform: translateY(16px) scale(.96); pointer-events: none;
+        transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+        font-size: 10px; letter-spacing: .16em;
+    }
+    .is-piloting #pilot-panel { opacity: 1; transform: none; }
+    .pilot-radar-wrap { position: relative; }
+    #pilot-radar { width: 100%; aspect-ratio: 1; display: block; border-radius: 50%; }
+    .radar-tag { position: absolute; left: 50%; bottom: -2px; transform: translateX(-50%); color: var(--orange); font-size: 8px; }
+    .pilot-keys { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .pilot-keys li { display: flex; justify-content: space-between; align-items: center; color: var(--muted); }
+    .pilot-keys b { color: var(--white); font-weight: 600; padding: 3px 7px; border: 1px solid var(--line); border-radius: 6px; background: rgba(255,255,255,.05); }
+    .is-piloting #interaction-hint { opacity: .25; }
+    @media (max-width: 760px) {
+        #pilot-panel { right: 12px; bottom: 84px; width: 112px; padding: 8px; }
+        .pilot-keys { display: none; }
+    }
     #lr-count { color: var(--white); font-size: 11px; }
     #lr-data {
         display: flex; gap: 18px; opacity: 0; font-variant-numeric: tabular-nums;
@@ -976,8 +1147,96 @@
     }
     #computational-cathedral.is-launching #lr-data { opacity: 1; }
     @media (max-width: 600px) {
-        #launch-readout { left: 22px; bottom: 72px; }
+        #launch-readout { left: 22px; bottom: 72px; max-width: calc(100% - 44px); padding: 9px 12px; font-size: 8px; }
         #lr-count { font-size: 9px; }
+        #lr-count { max-width: 76vw; line-height: 1.5; }
+    }
+
+    /* ---- Landing / planet card ---- */
+    #site-card {
+        --accent: #ff782e;
+        position: absolute; z-index: 8; left: clamp(22px, 4vw, 64px); top: 50%;
+        width: min(300px, calc(100% - 44px)); display: grid; gap: 12px; padding: 20px;
+        border: 1px solid rgba(238,234,226,.18); border-radius: 14px;
+        background: linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.02));
+        backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
+        box-shadow: 0 24px 70px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.04);
+        overflow: hidden;
+        opacity: 0; transform: translate(-14px, -50%); pointer-events: none;
+        transition: opacity .45s ease, transform .45s cubic-bezier(.2,.8,.2,1);
+    }
+    #site-card.is-visible { opacity: 1; transform: translate(0, -50%); pointer-events: auto; }
+    .sc-kicker { font-size: 8px; letter-spacing: .22em; color: var(--accent); }
+    #sc-title { margin: 0; font-size: 28px; font-weight: 650; letter-spacing: -.04em; line-height: 1; }
+    #sc-info { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; font-size: 11px; line-height: 1.55; color: rgba(238,234,226,.68); }
+    #sc-info li { position: relative; padding-left: 14px; }
+    #sc-info li::before { content: ""; position: absolute; left: 0; top: .66em; width: 6px; height: 1px; background: var(--accent); }
+    .sc-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+    .sc-actions [hidden] { display: none; }
+    .sc-actions button, .sc-actions a {
+        display: inline-flex; align-items: center; gap: 8px; padding: 11px 15px; cursor: pointer;
+        border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.05);
+        color: var(--white); font: inherit; font-size: 9px; font-weight: 600; letter-spacing: .19em; text-decoration: none;
+        transition: background .25s ease, border-color .25s ease;
+    }
+    .sc-actions button:hover, .sc-actions a:hover { background: rgba(255,255,255,.12); }
+    #sc-open { border-color: var(--accent); background: rgba(255,255,255,.08); }
+    #sc-open:hover { background: var(--accent); color: #050606; }
+    .sc-actions kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 4px; font: inherit; font-size: 8px; opacity: .7; }
+    @media (max-width: 760px) {
+        #site-card { top: auto; bottom: 78px; left: 12px; width: calc(100% - 160px); padding: 14px; transform: translateY(14px); }
+        #site-card.is-visible { transform: none; }
+        #sc-info, .sc-actions kbd { display: none; }
+        #sc-title { font-size: 20px; }
+    }
+
+    /* ===== Hero: skip link ===== */
+    .scroll-cue { position: absolute; right: 28px; bottom: 64px; z-index: 6; display: flex; align-items: center; gap: 10px; color: var(--white); font-size: 12px; letter-spacing: .08em; text-decoration: none; opacity: .75; transition: opacity .2s; }
+    .scroll-cue:hover, .scroll-cue:focus-visible { opacity: 1; }
+    .scroll-cue:focus-visible { outline: 2px solid var(--orange); outline-offset: 6px; }
+    .scroll-cue i { width: 1px; height: 34px; background: linear-gradient(var(--orange), transparent); }
+    @media (max-width: 600px) { .scroll-cue { right: 16px; bottom: 96px; } }
+
+    /* ===== Below the fold ===== */
+    .pd { --void: #050606; --white: #eeeae2; --muted: rgba(238,234,226,.62); --orange: #ff782e; --line: rgba(238,234,226,.14);
+          background: var(--void); color: var(--white); padding: clamp(72px, 12vw, 160px) 24px; font-family: inherit; }
+    .pd *, .pd *::before, .pd *::after { box-sizing: border-box; }
+    .pd-wrap { max-width: 1080px; margin: 0 auto; }
+    .pd h2 { font-size: clamp(30px, 5vw, 58px); line-height: 1.05; font-weight: 700; letter-spacing: -.02em; max-width: 18ch; margin: 0; }
+    .pd-head p { color: var(--muted); font-size: 18px; line-height: 1.6; max-width: 52ch; margin: 24px 0 0; }
+    .pd h3 { font-size: 15px; font-weight: 600; color: var(--muted); margin: 0 0 18px; }
+
+    .pd-projects { list-style: none; margin: 72px 0; padding: 0; border-top: 1px solid var(--line); }
+    .pd-projects li { border-bottom: 1px solid var(--line); }
+    .pd-projects a { display: grid; grid-template-columns: 1.1fr 1.6fr 1.2fr auto; gap: 24px; align-items: baseline; padding: 32px 8px; color: inherit; text-decoration: none; transition: background .25s, padding .25s; }
+    .pd-projects a:hover, .pd-projects a:focus-visible { background: rgba(255,120,46,.06); padding-left: 24px; outline: none; }
+    .pd-projects a:focus-visible { box-shadow: inset 3px 0 var(--orange); }
+    .pd-name { font-size: clamp(20px, 2.4vw, 28px); font-weight: 650; }
+    .pd-desc { color: var(--muted); line-height: 1.5; }
+    .pd-stack { color: var(--muted); font-size: 14px; }
+    .pd-go { color: var(--orange); font-size: 14px; white-space: nowrap; }
+
+    .pd-split { display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; }
+    .pd-chips, .pd-links { list-style: none; margin: 0; padding: 0; }
+    .pd-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pd-chips li { border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font-size: 14px; }
+    .pd-links li { border-bottom: 1px solid var(--line); }
+    .pd-links a { display: grid; grid-template-columns: 14px auto 1fr; gap: 14px; align-items: center; padding: 14px 0; color: inherit; text-decoration: none; font-weight: 600; }
+    .pd-links a:hover, .pd-links a:focus-visible { color: var(--c); outline: none; }
+    .pd-links i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 12px var(--c); }
+    .pd-links small { color: var(--muted); font-weight: 400; font-size: 13px; text-align: right; }
+
+    .pd-cta { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; margin-top: 96px; padding: 40px clamp(24px, 4vw, 48px); border: 1px solid var(--line); border-radius: 20px; color: inherit; text-decoration: none; font-size: clamp(20px, 2.6vw, 30px); font-weight: 600; transition: border-color .25s, background .25s; }
+    .pd-cta b { background: var(--orange); color: #120a04; padding: 14px 28px; border-radius: 999px; font-size: 16px; }
+    .pd-cta:hover, .pd-cta:focus-visible { border-color: var(--orange); background: rgba(255,120,46,.06); outline: none; }
+
+    .pd [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+    .pd [data-reveal].is-in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .pd [data-reveal] { opacity: 1; transform: none; transition: none; } }
+    @media (max-width: 800px) {
+        .pd-projects a { grid-template-columns: 1fr; gap: 8px; }
+        .pd-split { grid-template-columns: 1fr; gap: 40px; }
+        .pd-links small { display: none; }
     }
 </style>
 
@@ -1029,6 +1288,7 @@
 
         let inside = false;
         let dragging = false;
+        let flightLookDragging = false;
         let strength = 0;          // 0..1 fades in while the pointer is over the scene
         let pointerSpeed = 0;      // 0..1 decaying measure of cursor velocity
         let idleTime = 0;
@@ -1037,6 +1297,7 @@
         let hasLast = false;
         let downX = 0;
         let downY = 0;
+        let downButton = 0;
         let downTime = 0;
         let travel = 0;
         let hoveredMonolith = null;
@@ -1273,29 +1534,62 @@
         rocket.position.set(0, 0.5, 0);
         world.add(rocket);
 
+        // A compact, readable exploration craft: capsule hull, glazed cockpit,
+        // reinforced engine bell, and swept fins. Keep the long axis on Y so
+        // the existing flight and ray-picking controls continue to work.
         const centralSpire = addMesh(
-            new THREE.CylinderGeometry(0.13, 0.75, 7.5, 8, 1, false),
-            titanium, rocket, [0, 0, 0]
+            new THREE.CylinderGeometry(0.56, 0.72, 3.65, 32, 1),
+            silver, rocket, [0, 0.25, 0]
         );
-        centralSpire.rotation.y = Math.PI / 8;
 
-        addMesh(new THREE.CylinderGeometry(0.06, 0.28, 8.4, 8), amber, rocket, [0, 0.1, 0]);
+        const noseCone = addMesh(
+            new THREE.ConeGeometry(0.57, 1.35, 32),
+            titanium, rocket, [0, 2.75, 0]
+        );
+        noseCone.rotation.y = Math.PI / 32;
+
+        addMesh(new THREE.SphereGeometry(0.61, 24, 16), amber, rocket, [0, 1.65, 0], [1, 0.2, 1]);
 
         const centralDiamond = addMesh(
-            new THREE.OctahedronGeometry(1.15, 1),
-            silver, rocket, [0, 0.15, 0], [0.85, 1.75, 0.85]
+            new THREE.SphereGeometry(0.28, 24, 16),
+            energyLine, rocket, [0, 1.58, 0.55], [1, 1.15, 0.35]
         );
-        centralDiamond.rotation.y = Math.PI / 4;
-        centralDiamond.rotation.x = Math.PI / 7;
 
-        const innerCrystal = addMesh(new THREE.IcosahedronGeometry(0.72, 1), amber, rocket, [0, 0.05, 0]);
-        innerCrystal.scale.set(0.85, 1.6, 0.85);
+        const cockpitGlass = physicalMaterial({
+            color: 0x7bd9ed,
+            emissive: 0x123d58,
+            emissiveIntensity: 0.8,
+            metalness: 0.35,
+            roughness: 0.12,
+            transparent: true,
+            opacity: 0.92
+        });
+        addMesh(new THREE.SphereGeometry(0.2, 20, 14), cockpitGlass, rocket, [0, 1.65, 0.64], [1, 1.12, 0.42]);
+
+        const innerCrystal = addMesh(new THREE.IcosahedronGeometry(0.48, 1), amber, rocket, [0, -0.15, 0]);
+        innerCrystal.scale.set(0.7, 1.45, 0.7);
+
+        const hullBands = [];
+        for (const y of [-1.2, -0.95, 1.28]) {
+            hullBands.push(addMesh(
+                new THREE.TorusGeometry(y < 0 ? 0.65 : 0.56, 0.055, 8, 40),
+                y < 0 ? gold : energyLine, rocket, [0, y, 0]
+            ));
+        }
+
+        addMesh(new THREE.CylinderGeometry(0.46, 0.6, 0.78, 24), darkMetal, rocket, [0, -2.18, 0]);
+        addMesh(new THREE.TorusGeometry(0.54, 0.1, 10, 40), amber, rocket, [0, -2.62, 0]);
 
         for (let i = 0; i < 4; i++) {
-            const a = i * Math.PI / 2 + Math.PI / 4;
-            const fin = addMesh(new THREE.BoxGeometry(0.06, 1.5, 0.9), silver, rocket,
-                [Math.cos(a) * 0.8, -2.9, Math.sin(a) * 0.8]);
-            fin.rotation.y = Math.PI / 2 - a;
+            const angle = i * Math.PI / 2 + Math.PI / 4;
+            const fin = addMesh(
+                new THREE.BoxGeometry(0.12, 1.45, 0.72),
+                i % 2 === 0 ? titanium : silver,
+                rocket,
+                [Math.cos(angle) * 0.78, -1.72, Math.sin(angle) * 0.78]
+            );
+            fin.rotation.y = Math.PI / 2 - angle;
+            fin.rotation.z = Math.cos(angle) * -0.2;
         }
 
         // Towers: each one reacts to the cursor's position on the floor.
@@ -1937,15 +2231,27 @@
         let fovKick = 0;
         let chase = 0;
         let hoveredRocket = false;
+        let flightOrbitTheta = 0;
+        let flightOrbitPhi = 0;
+        let mouseSteerDragging = false;
+        let mouseSteerX = 0;
+        let mouseSteerY = 0;
 
         const ROCKET_HOME = new THREE.Vector3(0, 0.5, 0);
+        const padPos = new THREE.Vector3(0, 0.5, 0);   // where the rocket is currently parked
+        const keys = {};
+        let pilotBlend = 0;
+        let padScale = 1;          // scale of the rocket while parked
+        let nearSite = null;       // landing site / planet in range
+        let dockedSite = null;     // where the rocket is parked (null = unknown)
         const IGNITE_TIME = 3;
 
         const rocketState = {
             phase: 'idle', timer: 0, progress: 0, thrust: 0, heat: 0, boost: 0, roll: 0,
             speed: 0, emit: 0, count: 4, duration: 14,
             curve: null, target: null, uStart: 0.4, uEnd: 0.6,
-            scanned: false, done: false, aim: new THREE.Quaternion()
+            scanned: false, done: false, aim: new THREE.Quaternion(),
+            yaw: 0, pitch: 1.5, vel: 0, sc: 1, camPos: new THREE.Vector3()
         };
 
         const _Y = new THREE.Vector3(0, 1, 0);
@@ -1958,6 +2264,10 @@
         const _p = new THREE.Vector3();
         const _qa = new THREE.Quaternion();
         const _qr = new THREE.Quaternion();
+        const _flightOffset = new THREE.Vector3();
+        const _flightRight = new THREE.Vector3();
+        const _flightTarget = new THREE.Vector3();
+        const _flightPosition = new THREE.Vector3();
 
         const lrPhase = document.getElementById('lr-phase');
         const lrCount = document.getElementById('lr-count');
@@ -1967,9 +2277,11 @@
         function setReadout(phase, message) {
             if (lrPhase) lrPhase.textContent = phase;
             if (lrCount) lrCount.textContent = message;
+            const shouldShow = phase !== 'READY' && (phase !== 'TOUCHDOWN' || message === 'CLICK THE ROCKET TO LAUNCH AGAIN');
+            root.classList.toggle('has-readout', shouldShow);
         }
 
-        const rocketPickGeometry = new THREE.CylinderGeometry(1.25, 1.25, 8.8, 10);
+        const rocketPickGeometry = new THREE.CylinderGeometry(1.25, 1.25, 7.2, 10);
         const rocketPickMaterial = new THREE.MeshBasicMaterial({ visible: false });
         disposeGeometries.add(rocketPickGeometry);
         disposeMaterials.add(rocketPickMaterial);
@@ -1994,7 +2306,7 @@
         const flameMaterial = basicMaterial({ color: 0xff8a3d, ...flameOptions });
         const flameInnerMaterial = basicMaterial({ color: 0xfff0d0, ...flameOptions });
         const flame = new THREE.Mesh(flameGeometry, flameMaterial);
-        flame.position.y = -3.75;
+        flame.position.y = -2.72;
         flame.visible = false;
         rocket.add(flame);
 
@@ -2053,7 +2365,7 @@
 
         function emitExhaust(count, speed) {
             rocket.updateMatrixWorld();
-            _tail.set(0, -3.8, 0).applyMatrix4(rocket.matrixWorld);
+            _tail.set(0, -2.95, 0).applyMatrix4(rocket.matrixWorld);
             _dir.set(0, -1, 0).applyQuaternion(rocket.quaternion);
             const scale = rocket.scale.x;
 
@@ -2135,6 +2447,201 @@
             }
         }
 
+        // =====================================================================
+        // Planets, landing sites and page portals
+        // =====================================================================
+
+        const SITES = @json($sites);
+        const planets = [];
+        const planetGroup = new THREE.Group();
+        world.add(planetGroup);
+        const _pv = new THREE.Vector3();
+
+        function makeLabel(text, color) {
+            const c = document.createElement('canvas');
+            c.width = 512; c.height = 96;
+            const g = c.getContext('2d');
+            g.font = '600 36px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+            g.fillStyle = color; g.shadowColor = color; g.shadowBlur = 14;
+            g.fillText(text.split('').join(' '), 256, 48);
+            const tex = new THREE.CanvasTexture(c);
+            tex.colorSpace = THREE.SRGBColorSpace;
+            disposeTextures.add(tex);
+            const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, fog: false });
+            disposeMaterials.add(mat);
+            const sp = new THREE.Sprite(mat);
+            sp.scale.set(8, 1.5, 1);
+            return sp;
+        }
+
+        for (const site of SITES) {
+            const col = new THREE.Color(site.color);
+            const g = new THREE.Group();
+            g.position.set(site.pos[0], site.pos[1], site.pos[2]);
+            planetGroup.add(g);
+
+            const body = addMesh(new THREE.SphereGeometry(site.r, 48, 32),
+                physicalMaterial({ color: col, metalness: 0.35, roughness: 0.55, emissive: col, emissiveIntensity: 0.25, clearcoat: 0.6 }), g);
+            const band = addMesh(new THREE.TorusGeometry(site.r * 1.02, site.r * 0.012, 6, 120),
+                basicMaterial({ color: 0xffffff, transparent: true, opacity: 0.25 }), g);
+            band.rotation.x = Math.PI / 2;
+            if (site.ring) {
+                const ring = addMesh(new THREE.TorusGeometry(site.r * 1.7, site.r * 0.05, 8, 140), silver, g);
+                ring.rotation.set(1.2, 0.2, 0.3);
+            }
+            const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+                map: sprite, color: col, transparent: true, opacity: 0.4, depthWrite: false,
+                blending: THREE.AdditiveBlending, fog: false
+            }));
+            disposeMaterials.add(halo.material);
+            halo.scale.setScalar(site.r * 6);
+            g.add(halo);
+
+            const label = makeLabel(site.title, site.color);
+            label.position.y = site.r + 2.2;
+            g.add(label);
+
+            planets.push({
+                ...site, group: g, body, vec: g.position, range: site.r + 10,
+                top: new THREE.Vector3(site.pos[0], site.pos[1] + site.r, site.pos[2])
+            });
+        }
+
+        const HOME = {
+            key: 'home', home: true, title: 'HOME PAD', tag: 'LAUNCH SITE', url: '', color: '#ff782e',
+            r: 0, range: 12, vec: new THREE.Vector3(0, 0.5, 0),
+            info: ['Where the mission began', 'A safe place to park and look around']
+        };
+        const allSites = [HOME, ...planets];
+
+        // Beacon above the home pad so you can always find your way back.
+        addMesh(new THREE.CylinderGeometry(0.06, 0.06, 34, 8, 1, true),
+            basicMaterial({ color: 0xff8b43, transparent: true, opacity: 0.22, depthWrite: false, blending: THREE.AdditiveBlending }),
+            world, [0, 14, 0]);
+        const homeLabel = makeLabel('HOME PAD', '#ff782e');
+        homeLabel.position.set(0, 6.5, 0);
+        homeLabel.visible = false;
+        world.add(homeLabel);
+
+        const card = document.getElementById('site-card');
+        const scKicker = document.getElementById('sc-kicker');
+        const scTitle = document.getElementById('sc-title');
+        const scInfo = document.getElementById('sc-info');
+        const scLand = document.getElementById('sc-land');
+        const scOpen = document.getElementById('sc-open');
+
+        function renderCard(st) {
+            card.classList.toggle('is-visible', !!st);
+            card.setAttribute('aria-hidden', st ? 'false' : 'true');
+            if (!st) return;
+            card.style.setProperty('--accent', st.color);
+            scKicker.textContent = st.tag;
+            scTitle.textContent = st.title;
+            scInfo.replaceChildren(...st.info.map(text => {
+                const li = document.createElement('li');
+                li.textContent = text;
+                return li;
+            }));
+            scLand.hidden = rocketState.phase === 'idle';
+            scOpen.hidden = !st.url;
+            if (st.url) scOpen.href = st.url;
+        }
+
+        function updateSites() {
+            const s = rocketState;
+            let best = null, bestDist = 1e9;
+            if (s.phase === 'pilot' || s.phase === 'landing') {
+                for (const st of allSites) {
+                    const d = st.vec.distanceTo(rocket.position);
+                    if (d < st.range && d < bestDist) { best = st; bestDist = d; }
+                }
+            } else if (s.phase === 'idle' && dockedSite && !dockedSite.home) {
+                best = dockedSite;
+            }
+            if (best !== nearSite) { nearSite = best; renderCard(best); }
+        }
+
+        function avoidPlanets() {
+            for (const p of planets) {
+                _pv.copy(rocket.position).sub(p.vec);
+                const d = _pv.length(), m = p.r + 1.5;
+                if (d < m && d > 1e-4) rocket.position.copy(p.vec).addScaledVector(_pv, m / d);
+            }
+        }
+
+        function dockTo(st) {
+            const s = rocketState;
+            if (!st || (s.phase !== 'pilot' && s.phase !== 'landing')) return;
+            resetMouseSteer();
+            s.dockSite = st;
+            s.dockStage = 0;
+            s.dockSc = st.home ? 1 : 0.5;
+            s.dockPos = st.home ? new THREE.Vector3(0, ROCKET_HOME.y, 0) : st.top.clone().add(new THREE.Vector3(0, 3.55 * 0.5, 0));
+            s.phase = 'dock';
+            setReadout('LANDING', 'AUTOPILOT / ' + st.title);
+        }
+
+        function dockStep(dt) {
+            const s = rocketState;
+            _dir.copy(s.dockPos);
+            if (s.dockStage === 0) _dir.y += 7;
+            _dir.sub(rocket.position);
+            const dist = _dir.length();
+            if (s.dockStage === 0 && dist < 1.5) s.dockStage = 1;
+            const step = Math.min(clamp(dist * 1.4, s.dockStage ? 1.2 : 3, 22) * dt, dist);
+            if (dist > 1e-4) rocket.position.addScaledVector(_dir, step / dist);
+            if (s.dockStage === 0) avoidPlanets();
+            s.sc = damp(s.sc, s.dockSc, 3, dt);
+            _qa.identity();
+            s.aim.slerp(_qa, 1 - Math.exp(-dt * 3));
+            s.roll += dt * 0.6;
+            rocket.quaternion.copy(s.aim).multiply(_qr.setFromAxisAngle(_Y, s.roll));
+            rocket.scale.setScalar(s.sc);
+            s.thrust = damp(s.thrust, s.dockStage ? 0.55 : 0.4, 3, dt);
+            s.heat = s.thrust;
+            s.speed = damp(s.speed, step / Math.max(dt, 1e-4), 6, dt);
+            if (s.dockStage === 1 && dist < 0.06) finishDock();
+        }
+
+        function finishDock() {
+            const s = rocketState, st = s.dockSite;
+            s.phase = 'idle';
+            s.thrust = 0;
+            s.sc = s.dockSc;
+            padScale = s.dockSc;
+            padPos.copy(s.dockPos);
+            dockedSite = st;
+            rocket.position.copy(padPos);
+            rocket.scale.setScalar(padScale);
+            rocket.quaternion.identity();
+            if (st.home) {
+                triggerShock(_p.set(0, -3.05, 0));
+                spawnRing(_p.set(0, -2.9, 0), _Y, 2);
+            } else {
+                spawnRing(_p.copy(st.top), _Y, 1.2);
+                shake = 0.5;
+            }
+            setReadout('TOUCHDOWN', st.home ? 'CLICK THE ROCKET TO LAUNCH AGAIN' : st.title + ' / OPEN THE PAGE OR LAUNCH AGAIN');
+            root.classList.remove('is-launching', 'is-piloting');
+            pilotPanel.setAttribute('aria-hidden', 'true');
+            updateSites();
+        }
+
+        let leaving = false;
+        function openSite(st) {
+            if (leaving || !st || !st.url) return;
+            leaving = true;
+            shake = 1; pulse = 1;
+            setReadout('WARP', 'ENTERING ' + st.title);
+            gsap.to(root, { opacity: 0, duration: 0.7, ease: 'power2.in', onComplete: () => { window.location.href = st.url; } });
+        }
+        window.addEventListener('pageshow', e => {
+            if (e.persisted) { leaving = false; gsap.set(root, { opacity: 1 }); }
+        });
+
+        scLand.addEventListener('click', () => dockTo(nearSite));
+        scOpen.addEventListener('click', e => { e.preventDefault(); openSite(nearSite); });
+
         function buildFlightPath(target) {
             target.getWorldPosition(_p);
             const tp = _p.clone();
@@ -2191,21 +2698,25 @@
 
         function liftoff() {
             const s = rocketState;
-            buildFlightPath(s.target);
-            s.phase = 'flight';
-            s.progress = 0;
-            s.roll = 0;
+            s.phase = 'pilot';
+            s.yaw = 0; s.pitch = 1.5; s.vel = 3; s.sc = padScale; s.roll = 0;
+            flightOrbitTheta = 0;
+            flightOrbitPhi = 0;
+            s.camPos.copy(camera.position);
+            root.classList.add('is-piloting');
+            pilotPanel.setAttribute('aria-hidden', 'false');
             s.aim.copy(rocket.quaternion);
-            rocket.position.copy(ROCKET_HOME);
-            triggerShock(_p.set(0, -3.05, 0));
-            spawnRing(_p.set(0, -2.9, 0), _Y, 2.6);
+            rocket.position.copy(padPos);
+            triggerShock(_p.set(padPos.x, -3.05, padPos.z));
+            spawnRing(_p.set(padPos.x, dockedSite && !dockedSite.home ? padPos.y - 1.6 : -2.9, padPos.z), _Y, 2.6);
+            dockedSite = null;
             shake = 1;
-            setReadout('LIFTOFF', 'TRACKING ' + s.target.userData.name);
+            setReadout('LIFTOFF', 'YOU HAVE CONTROL — FLY ANYWHERE');
         }
 
         function boostRocket() {
             const s = rocketState;
-            if (s.phase !== 'flight') return;
+            if (s.phase !== 'pilot') return;
             s.boost = 1;
             pulse = Math.max(pulse, 0.8);
             shake = Math.max(shake, 0.6);
@@ -2217,13 +2728,62 @@
             const s = rocketState;
             s.phase = 'idle';
             s.thrust = 0;
-            rocket.position.copy(ROCKET_HOME);
+            padScale = 1; dockedSite = null;
+            padPos.set(rocket.position.x, ROCKET_HOME.y, rocket.position.z);
+            rocket.position.copy(padPos);
             rocket.scale.setScalar(1);
             rocket.quaternion.identity();
-            triggerShock(_p.set(0, -3.05, 0));
-            spawnRing(_p.set(0, -2.9, 0), _Y, 2);
-            setReadout('TOUCHDOWN', 'CLICK THE SPIRE TO LAUNCH AGAIN');
-            root.classList.remove('is-launching');
+            triggerShock(_p.set(padPos.x, -3.05, padPos.z));
+            spawnRing(_p.set(padPos.x, -2.9, padPos.z), _Y, 2);
+            setReadout('TOUCHDOWN', 'CLICK THE ROCKET TO LAUNCH AGAIN');
+            root.classList.remove('is-launching', 'is-piloting');
+            pilotPanel.setAttribute('aria-hidden', 'true');
+            resetMouseSteer();
+        }
+
+        const radar = document.getElementById('pilot-radar');
+        const pilotPanel = document.getElementById('pilot-panel');
+        const rctx = radar ? radar.getContext('2d') : null;
+
+        function updateMouseSteer(event) {
+            const range = 110;
+            let x = (event.clientX - downX) / range;
+            let y = (event.clientY - downY) / range;
+            const length = Math.hypot(x, y);
+
+            if (length > 1) {
+                x /= length;
+                y /= length;
+            }
+
+            const magnitude = Math.hypot(x, y);
+            const deadZone = 0.12;
+            const response = magnitude > deadZone ? (magnitude - deadZone) / (1 - deadZone) / magnitude : 0;
+            mouseSteerX = x * response;
+            mouseSteerY = y * response;
+        }
+
+        function resetMouseSteer() {
+            mouseSteerDragging = false;
+            mouseSteerX = 0;
+            mouseSteerY = 0;
+        }
+        function drawRadar() {
+            if (!rctx) return;
+            const W = 240, c = W / 2, sc = c / 62;
+            rctx.clearRect(0, 0, W, W);
+            rctx.fillStyle = 'rgba(5,6,6,.55)'; rctx.beginPath(); rctx.arc(c, c, c - 2, 0, TAU); rctx.fill();
+            rctx.strokeStyle = 'rgba(238,234,226,.16)'; rctx.lineWidth = 2;
+            for (const r of [.33, .66, 1]) { rctx.beginPath(); rctx.arc(c, c, (c - 2) * r, 0, TAU); rctx.stroke(); }
+            rctx.fillStyle = 'rgba(238,234,226,.7)';
+            for (const g of monolithGroups) {
+                g.getWorldPosition(_tail);
+                rctx.fillRect(c + _tail.x * sc - 4, c + _tail.z * sc - 4, 8, 8);
+            }
+            for (const p of planets) { rctx.fillStyle = p.color; rctx.beginPath(); rctx.arc(c + p.vec.x * sc, c + p.vec.z * sc, 9, 0, TAU); rctx.fill(); }
+            rctx.fillStyle = '#ff782e'; rctx.shadowColor = '#ff782e'; rctx.shadowBlur = 14;
+            rctx.beginPath(); rctx.arc(c + rocket.position.x * sc, c + rocket.position.z * sc, 7, 0, TAU); rctx.fill();
+            rctx.shadowBlur = 0;
         }
 
         function updateRocket(dt) {
@@ -2231,7 +2791,7 @@
             const hot = hoveredRocket && inside && s.phase === 'idle';
             s.boost = damp(s.boost, 0, 1.6, dt);
             fovKick = damp(fovKick, s.boost * 9, 6, dt);
-            chase = damp(chase, s.phase === 'flight' ? 1 : 0, 2.2, dt);
+            chase = damp(chase, (s.phase === 'flight' || (s.phase === 'idle' && dockedSite && !dockedSite.home)) ? 1 : 0, 2.2, dt);
 
             if (s.phase === 'idle') {
                 s.thrust = damp(s.thrust, 0, 6, dt);
@@ -2243,9 +2803,9 @@
                 s.thrust = k * 0.75;
                 s.heat = k;
                 rocket.position.set(
-                    ROCKET_HOME.x + (Math.random() - 0.5) * 0.06 * k,
-                    ROCKET_HOME.y + (Math.random() - 0.5) * 0.04 * k,
-                    ROCKET_HOME.z + (Math.random() - 0.5) * 0.06 * k
+                    padPos.x + (Math.random() - 0.5) * 0.06 * k,
+                    padPos.y + (Math.random() - 0.5) * 0.04 * k,
+                    padPos.z + (Math.random() - 0.5) * 0.06 * k
                 );
                 shake = Math.max(shake, 0.12 + k * 0.5);
                 pulse = Math.max(pulse, k * 0.4);
@@ -2253,37 +2813,76 @@
                 if (n > 0 && n !== s.count) {
                     s.count = n;
                     setReadout('IGNITION', 'T-' + n);
-                    spawnRing(_p.set(0, -2.9, 0), _Y, 1.2 + k);
+                    spawnRing(_p.set(padPos.x, -2.9, padPos.z), _Y, 1.2 + k);
                 }
                 if (s.timer >= IGNITE_TIME) liftoff();
+            } else if (s.phase === 'dock') {
+                dockStep(dt);
             } else {
-                s.progress = Math.min(1, s.progress + dt / s.duration * (1 + s.boost * 2.2));
-                const u = s.progress;
-                const pe = lerp(u, u * u * (3 - 2 * u), 0.55);
+                // ===== MANUAL FLIGHT =====
+                const K = keys;
+                const landing = s.phase === 'landing';
+                const L = K.a || K.arrowleft, R = K.d || K.arrowright;
+                const U = K.w || K.arrowup, D = K.s || K.arrowdown;
+                if (K.shift) s.boost = Math.max(s.boost, 0.7);
                 _prev.copy(rocket.position);
-                s.curve.getPointAt(pe, rocket.position);
-                s.curve.getTangentAt(pe, _tan);
-                _qa.setFromUnitVectors(_Y, _tan);
-                s.aim.slerp(_qa, 1 - Math.exp(-dt * 7));
-                s.roll += dt * (0.9 + s.boost * 9);
+
+                if (!landing) {
+                    let yawIn = (L ? 1 : 0) - (R ? 1 : 0) - (mouseSteerDragging ? mouseSteerX : 0);
+                    let pitchUp = (D ? 1 : 0) - (U ? 1 : 0) + (mouseSteerDragging ? mouseSteerY : 0);
+                    yawIn = clamp(yawIn, -1, 1);
+                    pitchUp = clamp(pitchUp, -1, 1);
+                    s.yaw += yawIn * dt * 1.45;
+                    s.pitch = clamp(s.pitch + pitchUp * dt * 1.15, -1.45, 1.5);
+                    const cp = Math.cos(s.pitch);
+                    _dir.set(-Math.sin(s.yaw) * cp, Math.sin(s.pitch), -Math.cos(s.yaw) * cp);
+                    const target = (7 + s.boost * 18) * (K.space ? 0.3 : 1);
+                    s.vel = damp(s.vel, target, 2.5, dt);
+                    rocket.position.addScaledVector(_dir, s.vel * dt);
+                    s.sc = damp(s.sc, 0.5, 3, dt);
+                } else {
+                    s.pitch = damp(s.pitch, 1.5, 3, dt);
+                    const fwdInput = (U ? 1 : 0) - (D ? 1 : 0) - (mouseSteerDragging ? mouseSteerY : 0);
+                    const strafeInput = (R ? 1 : 0) - (L ? 1 : 0) + (mouseSteerDragging ? mouseSteerX : 0);
+                    const fwd = clamp(fwdInput, -1, 1) * 5 * dt;
+                    const str = clamp(strafeInput, -1, 1) * 5 * dt;
+                    rocket.position.x += -Math.sin(s.yaw) * fwd + Math.cos(s.yaw) * str;
+                    rocket.position.z += -Math.cos(s.yaw) * fwd - Math.sin(s.yaw) * str;
+                    const alt = rocket.position.y - (-3.05 + 3.55 * s.sc);
+                    rocket.position.y -= clamp(alt * 0.6, 1.2, 9) * dt;
+                    s.sc = damp(s.sc, lerp(1, 0.5, clamp(alt / 8, 0, 1)), 4, dt);
+                    s.vel = damp(s.vel, 2, 3, dt);
+                    _dir.set(0, 1, 0);
+                }
+
+                const minY = -3.05 + 3.55 * s.sc;
+                const rr = Math.hypot(rocket.position.x, rocket.position.z);
+                if (rr > 60) { rocket.position.x *= 60 / rr; rocket.position.z *= 60 / rr; }
+                rocket.position.y = Math.min(rocket.position.y, 45);
+                avoidPlanets();
+                if (!landing) rocket.position.y = Math.max(rocket.position.y, minY + 0.3);
+
+                _qa.setFromUnitVectors(_Y, _dir.set(-Math.sin(s.yaw) * Math.cos(s.pitch), Math.sin(s.pitch), -Math.cos(s.yaw) * Math.cos(s.pitch)));
+                s.aim.slerp(_qa, 1 - Math.exp(-dt * 8));
+                s.roll += dt * (0.6 + s.boost * 6);
                 rocket.quaternion.copy(s.aim).multiply(_qr.setFromAxisAngle(_Y, s.roll));
-                const shrink = THREE.MathUtils.smoothstep(u, 0, 0.14);
-                const grow = THREE.MathUtils.smoothstep(u, 0.86, 1);
-                rocket.scale.setScalar(lerp(1, 0.4, shrink) * lerp(1, 2.5, grow));
-                s.thrust = damp(s.thrust, 1 - grow * 0.5 + s.boost * 0.8, 3, dt);
+                rocket.scale.setScalar(s.sc);
+                s.thrust = damp(s.thrust, landing ? 0.45 : 0.5 + s.boost * 0.7 + s.vel / 60, 3, dt);
                 s.heat = s.thrust;
                 s.speed = damp(s.speed, _prev.distanceTo(rocket.position) / Math.max(dt, 1e-4), 6, dt);
-                if (!s.scanned && u >= s.uStart) {
-                    s.scanned = true;
-                    setReadout('ORBIT', 'SCANNING ' + s.target.userData.name);
+
+                // fly close to a monolith to scan it
+                if (frameCount % 6 === 0) {
+                    for (const g of monolithGroups) {
+                        g.getWorldPosition(_tail);
+                        if (_tail.distanceTo(rocket.position) < 5 && clock.elapsedTime - (g.userData.lastFly || -99) > 5) {
+                            g.userData.lastFly = clock.elapsedTime;
+                            activateMonolith(g);
+                            setReadout('SCANNING', g.userData.name);
+                        }
+                    }
                 }
-                if (s.scanned && !s.done && u >= s.uEnd) {
-                    s.done = true;
-                    activateMonolith(s.target);
-                    pulse = 1;
-                    setReadout('SCAN COMPLETE', 'RETURNING TO BASE');
-                }
-                if (u >= 1) land();
+                if (landing && rocket.position.y <= minY + 0.05) land();
             }
 
             if (s.target) {
@@ -2307,9 +2906,12 @@
                 flameInnerMaterial.opacity = clamp(f * 1.5, 0, 0.95);
             }
             rocket.updateMatrixWorld();
-            rocketLight.position.copy(_tail.set(0, -3.8, 0).applyMatrix4(rocket.matrixWorld));
+            rocketLight.position.copy(_tail.set(0, -2.95, 0).applyMatrix4(rocket.matrixWorld));
             rocketLight.intensity = f * 70;
 
+            if (frameCount % 4 === 0) updateSites();
+            homeLabel.visible = s.phase !== 'idle' || !!(dockedSite && !dockedSite.home);
+            if (frameCount % 3 === 0 && (s.phase === 'pilot' || s.phase === 'landing' || s.phase === 'dock')) drawRadar();
             if (frameCount % 4 === 0 && lrAlt) {
                 const alt = Math.max(0, Math.round((rocket.position.y - ROCKET_HOME.y) * 12));
                 lrAlt.textContent = 'ALT ' + String(alt).padStart(3, '0') + ' M';
@@ -2482,6 +3084,51 @@
             button.addEventListener('click', () => changeView(button.dataset.view));
         });
 
+        function resetRocket() {
+            const s = rocketState;
+            if (s.target) s.target.userData.glow = 0;
+            for (const key in keys) keys[key] = false;
+            flightOrbitTheta = 0;
+            flightOrbitPhi = 0;
+
+            s.phase = 'idle';
+            s.timer = 0;
+            s.progress = 0;
+            s.thrust = 0;
+            s.heat = 0;
+            s.boost = 0;
+            s.roll = 0;
+            s.speed = 0;
+            s.emit = 0;
+            s.curve = null;
+            s.target = null;
+            s.scanned = false;
+            s.done = false;
+            s.aim.identity();
+            s.yaw = 0;
+            s.pitch = 1.5;
+            s.vel = 0;
+            s.sc = 1;
+            s.camPos.copy(camera.position);
+
+            padPos.copy(ROCKET_HOME);
+            padScale = 1;
+            dockedSite = null;
+            nearSite = null;
+            rocket.position.copy(ROCKET_HOME);
+            rocket.quaternion.identity();
+            rocket.scale.setScalar(1);
+
+            root.classList.remove('is-launching', 'is-piloting');
+            resetMouseSteer();
+            pilotPanel.setAttribute('aria-hidden', 'true');
+            renderCard(null);
+            setReadout('READY', 'CLICK THE SPIRE TO LAUNCH');
+            changeView('origin');
+        }
+
+        root.querySelector('#rocket-reset')?.addEventListener('click', resetRocket);
+
         document.getElementById('enter-world')?.addEventListener('click', () => {
             changeView(viewNames[(viewNames.indexOf(currentView) + 1) % viewNames.length]);
         });
@@ -2579,7 +3226,8 @@
         }
 
         function handleTap() {
-            if (rocketState.phase === 'flight') { boostRocket(); return; }
+            if (rocketState.phase === 'pilot') { boostRocket(); return; }
+            if (rocketState.phase === 'landing' || rocketState.phase === 'dock') return;
             if (rocketState.phase === 'ignite') return;
             if (pickRocket(targetPointer)) { launchRocket(); return; }
             const group = pickMonolith(targetPointer);
@@ -2628,11 +3276,18 @@
             if (dragging) {
                 travel += step;
 
-                orbitTarget.theta -= dx * 0.0055;
-                orbitTarget.phi = clamp(orbitTarget.phi - dy * 0.004, PHI_MIN, PHI_MAX);
+                if (mouseSteerDragging) {
+                    updateMouseSteer(event);
+                } else if (flightLookDragging) {
+                    flightOrbitTheta -= dx * 0.0055;
+                    flightOrbitPhi = clamp(flightOrbitPhi - dy * 0.004, -1.2, 1.2);
+                } else {
+                    orbitTarget.theta -= dx * 0.0055;
+                    orbitTarget.phi = clamp(orbitTarget.phi - dy * 0.004, PHI_MIN, PHI_MAX);
 
-                velTheta = lerp(velTheta, (-dx * 0.0055) * 60, 0.35);
-                velPhi = lerp(velPhi, (-dy * 0.004) * 60, 0.35);
+                    velTheta = lerp(velTheta, (-dx * 0.0055) * 60, 0.35);
+                    velPhi = lerp(velPhi, (-dy * 0.004) * 60, 0.35);
+                }
             }
 
             if (cursorEl) {
@@ -2660,7 +3315,10 @@
         }
 
         function onPointerDown(event) {
-            if (event.button !== 0) return;
+            const piloting = ['pilot', 'landing', 'dock'].includes(rocketState.phase);
+            const steerDrag = piloting && event.button === 2;
+            if (event.button !== 0 && !steerDrag) return;
+            if (steerDrag) event.preventDefault();
 
             setPointerFromEvent(event);
 
@@ -2671,15 +3329,19 @@
             }
 
             dragging = true;
+            mouseSteerDragging = steerDrag && event.pointerType === 'mouse';
+            flightLookDragging = piloting && event.button === 0;
             travel = 0;
             downX = event.clientX;
             downY = event.clientY;
+            downButton = event.button;
             downTime = performance.now();
             idleTime = 0;
             velTheta = 0;
             velPhi = 0;
 
-            gsap.killTweensOf(orbitTarget);
+            if (!flightLookDragging) gsap.killTweensOf(orbitTarget);
+            if (mouseSteerDragging) updateMouseSteer(event);
 
             cursorEl?.classList.add('is-down');
 
@@ -2693,11 +3355,13 @@
 
             if (!dragging) return;
             dragging = false;
+            resetMouseSteer();
+            flightLookDragging = false;
 
             const quick = performance.now() - downTime < 500;
             const still = travel < 6 && Math.hypot(event.clientX - downX, event.clientY - downY) < 6;
 
-            if (quick && still) handleTap();
+            if (quick && still && downButton === 0) handleTap();
 
             if (event.pointerType === 'touch') {
                 inside = false;
@@ -2707,7 +3371,13 @@
 
         function onPointerCancel() {
             dragging = false;
+            resetMouseSteer();
+            flightLookDragging = false;
             cursorEl?.classList.remove('is-down');
+        }
+
+        function onContextMenu(event) {
+            if (['pilot', 'landing', 'dock'].includes(rocketState.phase)) event.preventDefault();
         }
 
         // Shift + wheel (or trackpad pinch) zooms without hijacking page scroll.
@@ -2731,10 +3401,22 @@
             const tag = event.target?.tagName;
             if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
 
+            const kn = event.key === ' ' ? 'space' : event.key.toLowerCase();
+            keys[kn] = true;
+            if (rocketState.phase === 'pilot' || rocketState.phase === 'landing') {
+                if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(event.key.toLowerCase())) event.preventDefault();
+            }
+
             if (event.key === 'l' || event.key === 'L') {
-                if (rocketState.phase === 'flight') boostRocket(); else launchRocket();
+                const rs = rocketState;
+                if (rs.phase === 'pilot' || rs.phase === 'landing') {
+                    if (nearSite) dockTo(nearSite);
+                    else setReadout('NO SITE IN RANGE', 'FLY CLOSER TO A PLANET OR THE HOME PAD');
+                } else if (rs.phase === 'idle') launchRocket();
                 return;
             }
+
+            if (event.key === 'e' || event.key === 'E') { if (nearSite && nearSite.url) openSite(nearSite); return; }
 
             const index = ['1', '2', '3', '4'].indexOf(event.key);
             if (index > -1) changeView(viewNames[index]);
@@ -2744,10 +3426,18 @@
         root.addEventListener('pointerenter', onPointerEnter);
         root.addEventListener('pointerleave', onPointerLeave);
         mount.addEventListener('pointerdown', onPointerDown);
+        mount.addEventListener('contextmenu', onContextMenu);
         mount.addEventListener('wheel', onWheel, { passive: false });
         window.addEventListener('pointerup', onPointerUp);
         window.addEventListener('pointercancel', onPointerCancel);
+        function onKeyUp(event) { keys[event.key === ' ' ? 'space' : event.key.toLowerCase()] = false; }
+        function onBlur() {
+            for (const k in keys) keys[k] = false;
+            resetMouseSteer();
+        }
         window.addEventListener('keydown', onKeyDown);
+        window.addEventListener('keyup', onKeyUp);
+        window.addEventListener('blur', onBlur);
 
         // =====================================================================
         // Responsive sizing
@@ -2929,6 +3619,7 @@
             shake = damp(shake, 0, 5, dt);
             idleTime += dt;
             updateRocket(dt);
+            for (const p of planets) p.body.rotation.y += dt * 0.06;
 
             // ----- Camera orbit --------------------------------------------
 
@@ -2973,6 +3664,25 @@
                 camera.lookAt(look);
             }
 
+            {
+                const ps = rocketState, piloting = ps.phase === 'pilot' || ps.phase === 'landing' || ps.phase === 'dock';
+                pilotBlend = damp(pilotBlend, piloting ? 1 : 0, 2.5, dt);
+                if (pilotBlend > 0.002) {
+                    _dir.set(0, 1, 0).applyQuaternion(ps.aim);
+                    _tail.copy(rocket.position).addScaledVector(_dir, -9).add(_p.set(0, 3.2, 0));
+                    ps.camPos.lerp(_tail, 1 - Math.exp(-dt * 3));
+                    _flightTarget.copy(rocket.position).addScaledVector(_dir, 5);
+                    _flightOffset.copy(ps.camPos).sub(_flightTarget);
+                    _flightOffset.applyAxisAngle(_Y, flightOrbitTheta);
+                    _flightRight.crossVectors(_Y, _flightOffset).normalize();
+                    _flightOffset.applyAxisAngle(_flightRight, flightOrbitPhi);
+                    _flightPosition.copy(_flightTarget).add(_flightOffset);
+                    camera.position.lerp(_flightPosition, pilotBlend);
+                    camera.position.y = Math.max(camera.position.y, -2.4);
+                    _look.lerp(_flightTarget, pilotBlend);
+                    camera.lookAt(_look);
+                }
+            }
             if (Math.abs(camera.fov - (baseFov + fovKick)) > 0.01) {
                 camera.fov = baseFov + fovKick;
                 camera.updateProjectionMatrix();
@@ -3243,10 +3953,13 @@
             root.removeEventListener('pointerenter', onPointerEnter);
             root.removeEventListener('pointerleave', onPointerLeave);
             mount.removeEventListener('pointerdown', onPointerDown);
+            mount.removeEventListener('contextmenu', onContextMenu);
             mount.removeEventListener('wheel', onWheel);
             window.removeEventListener('pointerup', onPointerUp);
             window.removeEventListener('pointercancel', onPointerCancel);
             window.removeEventListener('keydown', onKeyDown);
+            window.removeEventListener('keyup', onKeyUp);
+            window.removeEventListener('blur', onBlur);
             document.removeEventListener('visibilitychange', onVisibilityChange);
 
             gsap.killTweensOf([
@@ -3282,6 +3995,16 @@
         }
 
         window.addEventListener('pagehide', cleanup, { once: true });
+    })();
+</script>
+<script>
+    (function () {
+        var els = document.querySelectorAll('.pd [data-reveal]');
+        if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('is-in'); }); return; }
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+        }, { threshold: 0.15 });
+        els.forEach(function (e) { io.observe(e); });
     })();
 </script>
 @endsection

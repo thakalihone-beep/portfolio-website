@@ -48,11 +48,20 @@
             <span class="brand-caption">INDEPENDENT DIGITAL SYSTEMS</span>
         </a>
 
+        <nav class="cathedral-nav" aria-label="Main navigation">
+            <a href="{{ route('about') }}">About</a>
+            <a href="{{ route('projects') }}">Projects</a>
+            <a href="{{ route('skills') }}">Skills</a>
+            <a href="{{ route('blog') }}">Blog</a>
+            <a href="{{ route('contact') }}">Contact</a>
+        </nav>
+
         <div class="system-status">
             <span class="status-light"></span>
             <span>WORLD ONLINE</span>
             <span class="status-divider">/</span>
             <span id="scene-clock">00:00:00</span>
+            <button id="rocket-reset" type="button" aria-label="Return rocket to starting position" title="Return rocket to starting position">↻</button>
         </div>
     </header>
 
@@ -131,7 +140,7 @@
         </div>
 
         <div class="bottom-center" id="interaction-hint">
-            MOVE TO DISTORT <span>·</span> DRAG TO ORBIT <span>·</span> CLICK THE ROCKET TO LAUNCH <span>·</span> FLY TO A PLANET <span>·</span> L TO LAND <span>·</span> KEYS 1–4
+            MOVE TO DISTORT <span>·</span> LEFT DRAG TO STEER <span>·</span> RIGHT DRAG TO LOOK AROUND <span>·</span> CLICK THE ROCKET TO LAUNCH / BOOST <span>·</span> USE THE LAND OR OPEN BUTTONS
         </div>
 
         <div class="bottom-right">
@@ -159,12 +168,11 @@
     <div id="pilot-panel" aria-hidden="true">
         <div class="pilot-radar-wrap"><canvas id="pilot-radar" width="240" height="240"></canvas><span class="radar-tag">RADAR</span></div>
         <ul class="pilot-keys">
-            <li><b>W / S</b><span>PITCH</span></li>
-            <li><b>A / D</b><span>TURN</span></li>
-            <li><b>SHIFT</b><span>BOOST</span></li>
-            <li><b>SPACE</b><span>BRAKE</span></li>
-            <li><b>L</b><span>LAND</span></li>
-            <li><b>E</b><span>OPEN PAGE</span></li>
+            <li><b>LEFT DRAG</b><span>AIM / STEER</span></li>
+            <li><b>RIGHT DRAG</b><span>LOOK AROUND</span></li>
+            <li><b>CLICK ROCKET</b><span>LAUNCH / BOOST</span></li>
+            <li><b>LAND BUTTON</b><span>AUTOPILOT</span></li>
+            <li><b>OPEN BUTTON</b><span>VISIT PAGE</span></li>
         </ul>
     </div>
 
@@ -173,8 +181,8 @@
         <h3 id="sc-title"></h3>
         <ul id="sc-info"></ul>
         <div class="sc-actions">
-            <button id="sc-land" type="button">LAND <kbd>L</kbd></button>
-            <a id="sc-open" href="#">OPEN PAGE <kbd>E</kbd></a>
+            <button id="sc-land" type="button">LAND</button>
+            <a id="sc-open" href="#">OPEN PAGE</a>
         </div>
     </div>
 
@@ -190,6 +198,12 @@
 </section>
 
 <style>
+    #computational-cathedral *,
+    #computational-cathedral *::before,
+    #computational-cathedral *::after {
+        box-sizing: border-box;
+    }
+
     #computational-cathedral {
         --void: #050606;
         --white: #eeeae2;
@@ -279,6 +293,7 @@
     }
 
     .cathedral-header a,
+    .cathedral-header button,
     .cathedral-index button,
     .enter-world {
         pointer-events: auto;
@@ -339,6 +354,51 @@
         letter-spacing: .17em;
     }
 
+    .cathedral-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(16px, 2.2vw, 34px);
+        margin: 0 auto;
+        padding: 0 28px;
+    }
+
+    .cathedral-nav a {
+        position: relative;
+        padding: 10px 0;
+        color: rgba(238,234,226,.62);
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: .12em;
+        line-height: 1;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: color .22s ease;
+    }
+
+    .cathedral-nav a::after {
+        position: absolute;
+        right: 0;
+        bottom: 2px;
+        left: 0;
+        height: 1px;
+        background: var(--orange);
+        content: "";
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform .22s ease;
+    }
+
+    .cathedral-nav a:hover,
+    .cathedral-nav a:focus-visible {
+        color: var(--white);
+    }
+
+    .cathedral-nav a:hover::after,
+    .cathedral-nav a:focus-visible::after {
+        transform: scaleX(1);
+    }
+
     .system-status {
         display: flex;
         align-items: center;
@@ -357,6 +417,30 @@
     }
 
     .status-divider {
+        color: var(--orange);
+    }
+
+    #rocket-reset {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border: 1px solid rgba(238,234,226,.24);
+        border-radius: 50%;
+        background: transparent;
+        color: var(--white);
+        font: inherit;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        transition: color .25s ease, border-color .25s ease, background .25s ease, transform .25s ease;
+    }
+
+    #rocket-reset:hover {
+        transform: rotate(-45deg);
+        border-color: var(--orange);
+        background: rgba(255,120,46,.1);
         color: var(--orange);
     }
 
@@ -386,7 +470,7 @@
         color: rgba(238,234,226,.4);
         text-align: left;
         cursor: pointer;
-        transition: color .3s ease, padding .3s ease, translate .25s ease;
+        transition: color .3s ease, padding .3s ease, translate .25s ease, border-color .3s ease;
     }
 
     .world-marker span {
@@ -407,6 +491,11 @@
         color: var(--white);
     }
 
+    .world-marker:hover {
+        padding-left: 5px;
+        border-bottom-color: rgba(255,120,46,.48);
+    }
+
     .world-marker.is-active::before {
         width: 20px;
     }
@@ -417,7 +506,8 @@
 
     .world-marker:focus-visible,
     .enter-world:focus-visible,
-    .cathedral-brand:focus-visible {
+    .cathedral-brand:focus-visible,
+    #rocket-reset:focus-visible {
         outline: 1px solid var(--orange);
         outline-offset: 6px;
     }
@@ -577,6 +667,7 @@
         color: var(--orange);
         font-size: 16px;
         transition: transform .3s ease, background .3s ease;
+        box-shadow: 0 0 24px rgba(255,120,46,.08);
     }
 
     .enter-world:hover .enter-icon {
@@ -838,6 +929,8 @@
     }
 
     @media (max-width: 900px) {
+        .cathedral-nav { gap: 14px; padding: 0 14px; }
+        .cathedral-nav a { font-size: 9px; letter-spacing: .08em; }
         .cathedral-intro {
             width: 72%;
             left: 5vw;
@@ -875,6 +968,27 @@
             padding: 0 20px;
         }
 
+        .cathedral-nav {
+            position: absolute;
+            top: 76px;
+            right: 20px;
+            left: 20px;
+            justify-content: flex-start;
+            gap: 24px;
+            overflow-x: auto;
+            margin: 0;
+            padding: 12px 14px;
+            border: 1px solid rgba(238,234,226,.12);
+            border-radius: 999px;
+            background: rgba(5,6,6,.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            scrollbar-width: none;
+        }
+
+        .cathedral-nav::-webkit-scrollbar { display: none; }
+        .cathedral-nav a { flex: 0 0 auto; font-size: 9px; }
+
         .brand-caption {
             display: none;
         }
@@ -885,7 +999,7 @@
         }
 
         .cathedral-index {
-            top: 95px;
+            top: 128px;
             right: 20px;
             transform: none;
             flex-direction: row;
@@ -999,12 +1113,20 @@
         }
     }
     .cathedral-intro { transition: filter .7s ease; }
-    #computational-cathedral.is-launching .cathedral-intro { filter: opacity(.12); }
+    #computational-cathedral.has-readout .cathedral-intro { filter: opacity(.12); }
     #launch-readout {
         position: absolute; z-index: 4; pointer-events: none;
         left: clamp(22px, 8.3vw, 130px); bottom: 84px;
-        display: grid; gap: 7px; font-size: 9px; font-weight: 500;
+        display: grid; gap: 7px; padding: 12px 15px;
+        border-left: 1px solid rgba(255,120,46,.65);
+        background: linear-gradient(90deg, rgba(8,10,10,.76), transparent);
+        font-size: 9px; font-weight: 500;
         letter-spacing: .19em; color: var(--muted);
+        opacity: 0; visibility: hidden; transform: translateY(8px);
+        transition: opacity .3s ease, transform .3s ease, visibility .3s ease;
+    }
+    #computational-cathedral.has-readout #launch-readout {
+        opacity: 1; visibility: visible; transform: none;
     }
     #lr-phase { color: var(--orange); }
 
@@ -1028,7 +1150,10 @@
     .pilot-keys li { display: flex; justify-content: space-between; align-items: center; color: var(--muted); }
     .pilot-keys b { color: var(--white); font-weight: 600; padding: 3px 7px; border: 1px solid var(--line); border-radius: 6px; background: rgba(255,255,255,.05); }
     .is-piloting #interaction-hint { opacity: .25; }
-    @media (max-width: 760px) { #pilot-panel { right: 12px; bottom: 84px; width: 130px; padding: 10px; } .pilot-keys { display: none; } }
+    @media (max-width: 760px) {
+        #pilot-panel { right: 12px; bottom: 84px; width: 112px; padding: 8px; }
+        .pilot-keys { display: none; }
+    }
     #lr-count { color: var(--white); font-size: 11px; }
     #lr-data {
         display: flex; gap: 18px; opacity: 0; font-variant-numeric: tabular-nums;
@@ -1036,8 +1161,9 @@
     }
     #computational-cathedral.is-launching #lr-data { opacity: 1; }
     @media (max-width: 600px) {
-        #launch-readout { left: 22px; bottom: 72px; }
+        #launch-readout { left: 22px; bottom: 72px; max-width: calc(100% - 44px); padding: 9px 12px; font-size: 8px; }
         #lr-count { font-size: 9px; }
+        #lr-count { max-width: 76vw; line-height: 1.5; }
     }
 
     /* ---- Landing / planet card ---- */
@@ -1045,10 +1171,11 @@
         --accent: #ff782e;
         position: absolute; z-index: 8; left: clamp(22px, 4vw, 64px); top: 50%;
         width: min(300px, calc(100% - 44px)); display: grid; gap: 12px; padding: 20px;
-        border: 1px solid var(--line); border-radius: 18px;
+        border: 1px solid rgba(238,234,226,.18); border-radius: 14px;
         background: linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.02));
         backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
         box-shadow: 0 24px 70px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.04);
+        overflow: hidden;
         opacity: 0; transform: translate(-14px, -50%); pointer-events: none;
         transition: opacity .45s ease, transform .45s cubic-bezier(.2,.8,.2,1);
     }
@@ -1126,6 +1253,7 @@
 
         let inside = false;
         let dragging = false;
+        let flightLookDragging = false;
         let strength = 0;          // 0..1 fades in while the pointer is over the scene
         let pointerSpeed = 0;      // 0..1 decaying measure of cursor velocity
         let idleTime = 0;
@@ -1134,6 +1262,7 @@
         let hasLast = false;
         let downX = 0;
         let downY = 0;
+        let downButton = 0;
         let downTime = 0;
         let travel = 0;
         let hoveredMonolith = null;
@@ -1370,29 +1499,62 @@
         rocket.position.set(0, 0.5, 0);
         world.add(rocket);
 
+        // A compact, readable exploration craft: capsule hull, glazed cockpit,
+        // reinforced engine bell, and swept fins. Keep the long axis on Y so
+        // the existing flight and ray-picking controls continue to work.
         const centralSpire = addMesh(
-            new THREE.CylinderGeometry(0.13, 0.75, 7.5, 8, 1, false),
-            titanium, rocket, [0, 0, 0]
+            new THREE.CylinderGeometry(0.56, 0.72, 3.65, 32, 1),
+            silver, rocket, [0, 0.25, 0]
         );
-        centralSpire.rotation.y = Math.PI / 8;
 
-        addMesh(new THREE.CylinderGeometry(0.06, 0.28, 8.4, 8), amber, rocket, [0, 0.1, 0]);
+        const noseCone = addMesh(
+            new THREE.ConeGeometry(0.57, 1.35, 32),
+            titanium, rocket, [0, 2.75, 0]
+        );
+        noseCone.rotation.y = Math.PI / 32;
+
+        addMesh(new THREE.SphereGeometry(0.61, 24, 16), amber, rocket, [0, 1.65, 0], [1, 0.2, 1]);
 
         const centralDiamond = addMesh(
-            new THREE.OctahedronGeometry(1.15, 1),
-            silver, rocket, [0, 0.15, 0], [0.85, 1.75, 0.85]
+            new THREE.SphereGeometry(0.28, 24, 16),
+            energyLine, rocket, [0, 1.58, 0.55], [1, 1.15, 0.35]
         );
-        centralDiamond.rotation.y = Math.PI / 4;
-        centralDiamond.rotation.x = Math.PI / 7;
 
-        const innerCrystal = addMesh(new THREE.IcosahedronGeometry(0.72, 1), amber, rocket, [0, 0.05, 0]);
-        innerCrystal.scale.set(0.85, 1.6, 0.85);
+        const cockpitGlass = physicalMaterial({
+            color: 0x7bd9ed,
+            emissive: 0x123d58,
+            emissiveIntensity: 0.8,
+            metalness: 0.35,
+            roughness: 0.12,
+            transparent: true,
+            opacity: 0.92
+        });
+        addMesh(new THREE.SphereGeometry(0.2, 20, 14), cockpitGlass, rocket, [0, 1.65, 0.64], [1, 1.12, 0.42]);
+
+        const innerCrystal = addMesh(new THREE.IcosahedronGeometry(0.48, 1), amber, rocket, [0, -0.15, 0]);
+        innerCrystal.scale.set(0.7, 1.45, 0.7);
+
+        const hullBands = [];
+        for (const y of [-1.2, -0.95, 1.28]) {
+            hullBands.push(addMesh(
+                new THREE.TorusGeometry(y < 0 ? 0.65 : 0.56, 0.055, 8, 40),
+                y < 0 ? gold : energyLine, rocket, [0, y, 0]
+            ));
+        }
+
+        addMesh(new THREE.CylinderGeometry(0.46, 0.6, 0.78, 24), darkMetal, rocket, [0, -2.18, 0]);
+        addMesh(new THREE.TorusGeometry(0.54, 0.1, 10, 40), amber, rocket, [0, -2.62, 0]);
 
         for (let i = 0; i < 4; i++) {
-            const a = i * Math.PI / 2 + Math.PI / 4;
-            const fin = addMesh(new THREE.BoxGeometry(0.06, 1.5, 0.9), silver, rocket,
-                [Math.cos(a) * 0.8, -2.9, Math.sin(a) * 0.8]);
-            fin.rotation.y = Math.PI / 2 - a;
+            const angle = i * Math.PI / 2 + Math.PI / 4;
+            const fin = addMesh(
+                new THREE.BoxGeometry(0.12, 1.45, 0.72),
+                i % 2 === 0 ? titanium : silver,
+                rocket,
+                [Math.cos(angle) * 0.78, -1.72, Math.sin(angle) * 0.78]
+            );
+            fin.rotation.y = Math.PI / 2 - angle;
+            fin.rotation.z = Math.cos(angle) * -0.2;
         }
 
         // Towers: each one reacts to the cursor's position on the floor.
@@ -2034,10 +2196,16 @@
         let fovKick = 0;
         let chase = 0;
         let hoveredRocket = false;
+        let flightOrbitTheta = 0;
+        let flightOrbitPhi = 0;
+        let mouseSteerDragging = false;
+        let mouseSteerX = 0;
+        let mouseSteerY = 0;
+        let mouseSteerStartYaw = 0;
+        let mouseSteerStartPitch = 0;
 
         const ROCKET_HOME = new THREE.Vector3(0, 0.5, 0);
         const padPos = new THREE.Vector3(0, 0.5, 0);   // where the rocket is currently parked
-        const keys = {};
         let pilotBlend = 0;
         let padScale = 1;          // scale of the rocket while parked
         let nearSite = null;       // landing site / planet in range
@@ -2062,6 +2230,10 @@
         const _p = new THREE.Vector3();
         const _qa = new THREE.Quaternion();
         const _qr = new THREE.Quaternion();
+        const _flightOffset = new THREE.Vector3();
+        const _flightRight = new THREE.Vector3();
+        const _flightTarget = new THREE.Vector3();
+        const _flightPosition = new THREE.Vector3();
 
         const lrPhase = document.getElementById('lr-phase');
         const lrCount = document.getElementById('lr-count');
@@ -2071,9 +2243,11 @@
         function setReadout(phase, message) {
             if (lrPhase) lrPhase.textContent = phase;
             if (lrCount) lrCount.textContent = message;
+            const shouldShow = phase !== 'READY' && (phase !== 'TOUCHDOWN' || message === 'CLICK THE ROCKET TO LAUNCH AGAIN');
+            root.classList.toggle('has-readout', shouldShow);
         }
 
-        const rocketPickGeometry = new THREE.CylinderGeometry(1.25, 1.25, 8.8, 10);
+        const rocketPickGeometry = new THREE.CylinderGeometry(1.25, 1.25, 7.2, 10);
         const rocketPickMaterial = new THREE.MeshBasicMaterial({ visible: false });
         disposeGeometries.add(rocketPickGeometry);
         disposeMaterials.add(rocketPickMaterial);
@@ -2098,7 +2272,7 @@
         const flameMaterial = basicMaterial({ color: 0xff8a3d, ...flameOptions });
         const flameInnerMaterial = basicMaterial({ color: 0xfff0d0, ...flameOptions });
         const flame = new THREE.Mesh(flameGeometry, flameMaterial);
-        flame.position.y = -3.75;
+        flame.position.y = -2.72;
         flame.visible = false;
         rocket.add(flame);
 
@@ -2157,7 +2331,7 @@
 
         function emitExhaust(count, speed) {
             rocket.updateMatrixWorld();
-            _tail.set(0, -3.8, 0).applyMatrix4(rocket.matrixWorld);
+            _tail.set(0, -2.95, 0).applyMatrix4(rocket.matrixWorld);
             _dir.set(0, -1, 0).applyQuaternion(rocket.quaternion);
             const scale = rocket.scale.x;
 
@@ -2364,6 +2538,7 @@
         function dockTo(st) {
             const s = rocketState;
             if (!st || (s.phase !== 'pilot' && s.phase !== 'landing')) return;
+            resetMouseSteer();
             s.dockSite = st;
             s.dockStage = 0;
             s.dockSc = st.home ? 1 : 0.5;
@@ -2413,8 +2588,8 @@
                 shake = 0.5;
             }
             setReadout('TOUCHDOWN', st.home ? 'CLICK THE ROCKET TO LAUNCH AGAIN' : st.title + ' / OPEN THE PAGE OR LAUNCH AGAIN');
-            root.classList.remove('is-piloting');
-            if (st.home) root.classList.remove('is-launching');
+            root.classList.remove('is-launching', 'is-piloting');
+            pilotPanel.setAttribute('aria-hidden', 'true');
             updateSites();
         }
 
@@ -2490,16 +2665,19 @@
         function liftoff() {
             const s = rocketState;
             s.phase = 'pilot';
-            s.yaw = 0; s.pitch = 1.5; s.vel = 3; s.sc = padScale; s.roll = 0;
+            s.yaw = 0; s.pitch = 0.82; s.vel = 3; s.sc = padScale; s.roll = 0;
+            flightOrbitTheta = 0;
+            flightOrbitPhi = 0;
             s.camPos.copy(camera.position);
             root.classList.add('is-piloting');
+            pilotPanel.setAttribute('aria-hidden', 'false');
             s.aim.copy(rocket.quaternion);
             rocket.position.copy(padPos);
             triggerShock(_p.set(padPos.x, -3.05, padPos.z));
             spawnRing(_p.set(padPos.x, dockedSite && !dockedSite.home ? padPos.y - 1.6 : -2.9, padPos.z), _Y, 2.6);
             dockedSite = null;
             shake = 1;
-            setReadout('LIFTOFF', 'YOU HAVE CONTROL — FLY ANYWHERE');
+            setReadout('LIFTOFF', 'LEFT DRAG TO STEER / RIGHT DRAG TO LOOK AROUND');
         }
 
         function boostRocket() {
@@ -2525,10 +2703,37 @@
             spawnRing(_p.set(padPos.x, -2.9, padPos.z), _Y, 2);
             setReadout('TOUCHDOWN', 'CLICK THE ROCKET TO LAUNCH AGAIN');
             root.classList.remove('is-launching', 'is-piloting');
+            pilotPanel.setAttribute('aria-hidden', 'true');
+            resetMouseSteer();
         }
 
         const radar = document.getElementById('pilot-radar');
+        const pilotPanel = document.getElementById('pilot-panel');
         const rctx = radar ? radar.getContext('2d') : null;
+
+        function updateMouseSteer(event) {
+            const range = 180;
+            let x = (event.clientX - downX) / range;
+            let y = (event.clientY - downY) / range;
+            const length = Math.hypot(x, y);
+
+            if (length > 1) {
+                x /= length;
+                y /= length;
+            }
+
+            const magnitude = Math.hypot(x, y);
+            const deadZone = 0.08;
+            const response = magnitude > deadZone ? Math.pow((magnitude - deadZone) / (1 - deadZone), 1.35) / magnitude : 0;
+            mouseSteerX = x * response;
+            mouseSteerY = y * response;
+        }
+
+        function resetMouseSteer() {
+            mouseSteerDragging = false;
+            mouseSteerX = 0;
+            mouseSteerY = 0;
+        }
         function drawRadar() {
             if (!rctx) return;
             const W = 240, c = W / 2, sc = c / 62;
@@ -2581,28 +2786,30 @@
                 dockStep(dt);
             } else {
                 // ===== MANUAL FLIGHT =====
-                const K = keys;
                 const landing = s.phase === 'landing';
-                const L = K.a || K.arrowleft, R = K.d || K.arrowright;
-                const U = K.w || K.arrowup, D = K.s || K.arrowdown;
-                if (K.shift) s.boost = Math.max(s.boost, 0.7);
                 _prev.copy(rocket.position);
 
                 if (!landing) {
-                    let yawIn = (L ? 1 : 0) - (R ? 1 : 0);
-                    let pitchUp = (D ? 1 : 0) - (U ? 1 : 0);
-                    if (isMobile && inside) { yawIn -= targetPointer.x * 1.2; pitchUp += targetPointer.y * 1.2; }
-                    s.yaw += yawIn * dt * 1.7;
-                    s.pitch = clamp(s.pitch + pitchUp * dt * 1.4, -1.45, 1.5);
+                    if (mouseSteerDragging) {
+                        const targetYaw = mouseSteerStartYaw - mouseSteerX * 0.9;
+                        const targetPitch = clamp(mouseSteerStartPitch + mouseSteerY * 0.65, -1.25, 1.25);
+                        const steerEase = 1 - Math.exp(-dt * 4.5);
+                        const yawDelta = Math.atan2(Math.sin(targetYaw - s.yaw), Math.cos(targetYaw - s.yaw));
+                        s.yaw += yawDelta * steerEase;
+                        s.pitch += (targetPitch - s.pitch) * steerEase;
+                    }
                     const cp = Math.cos(s.pitch);
                     _dir.set(-Math.sin(s.yaw) * cp, Math.sin(s.pitch), -Math.cos(s.yaw) * cp);
-                    const target = (7 + s.boost * 18) * (K.space ? 0.3 : 1);
+                    const target = 3.5 + s.boost * 8;
                     s.vel = damp(s.vel, target, 2.5, dt);
                     rocket.position.addScaledVector(_dir, s.vel * dt);
                     s.sc = damp(s.sc, 0.5, 3, dt);
                 } else {
                     s.pitch = damp(s.pitch, 1.5, 3, dt);
-                    const fwd = ((U ? 1 : 0) - (D ? 1 : 0)) * 5 * dt, str = ((R ? 1 : 0) - (L ? 1 : 0)) * 5 * dt;
+                    const fwdInput = mouseSteerDragging ? -mouseSteerY : 0;
+                    const strafeInput = mouseSteerDragging ? mouseSteerX : 0;
+                    const fwd = clamp(fwdInput, -1, 1) * 5 * dt;
+                    const str = clamp(strafeInput, -1, 1) * 5 * dt;
                     rocket.position.x += -Math.sin(s.yaw) * fwd + Math.cos(s.yaw) * str;
                     rocket.position.z += -Math.cos(s.yaw) * fwd - Math.sin(s.yaw) * str;
                     const alt = rocket.position.y - (-3.05 + 3.55 * s.sc);
@@ -2663,7 +2870,7 @@
                 flameInnerMaterial.opacity = clamp(f * 1.5, 0, 0.95);
             }
             rocket.updateMatrixWorld();
-            rocketLight.position.copy(_tail.set(0, -3.8, 0).applyMatrix4(rocket.matrixWorld));
+            rocketLight.position.copy(_tail.set(0, -2.95, 0).applyMatrix4(rocket.matrixWorld));
             rocketLight.intensity = f * 70;
 
             if (frameCount % 4 === 0) updateSites();
@@ -2841,6 +3048,50 @@
             button.addEventListener('click', () => changeView(button.dataset.view));
         });
 
+        function resetRocket() {
+            const s = rocketState;
+            if (s.target) s.target.userData.glow = 0;
+            flightOrbitTheta = 0;
+            flightOrbitPhi = 0;
+
+            s.phase = 'idle';
+            s.timer = 0;
+            s.progress = 0;
+            s.thrust = 0;
+            s.heat = 0;
+            s.boost = 0;
+            s.roll = 0;
+            s.speed = 0;
+            s.emit = 0;
+            s.curve = null;
+            s.target = null;
+            s.scanned = false;
+            s.done = false;
+            s.aim.identity();
+            s.yaw = 0;
+            s.pitch = 1.5;
+            s.vel = 0;
+            s.sc = 1;
+            s.camPos.copy(camera.position);
+
+            padPos.copy(ROCKET_HOME);
+            padScale = 1;
+            dockedSite = null;
+            nearSite = null;
+            rocket.position.copy(ROCKET_HOME);
+            rocket.quaternion.identity();
+            rocket.scale.setScalar(1);
+
+            root.classList.remove('is-launching', 'is-piloting');
+            resetMouseSteer();
+            pilotPanel.setAttribute('aria-hidden', 'true');
+            renderCard(null);
+            setReadout('READY', 'CLICK THE SPIRE TO LAUNCH');
+            changeView('origin');
+        }
+
+        root.querySelector('#rocket-reset')?.addEventListener('click', resetRocket);
+
         document.getElementById('enter-world')?.addEventListener('click', () => {
             changeView(viewNames[(viewNames.indexOf(currentView) + 1) % viewNames.length]);
         });
@@ -2988,11 +3239,18 @@
             if (dragging) {
                 travel += step;
 
-                orbitTarget.theta -= dx * 0.0055;
-                orbitTarget.phi = clamp(orbitTarget.phi - dy * 0.004, PHI_MIN, PHI_MAX);
+                if (mouseSteerDragging) {
+                    updateMouseSteer(event);
+                } else if (flightLookDragging) {
+                    flightOrbitTheta -= dx * 0.0055;
+                    flightOrbitPhi = clamp(flightOrbitPhi - dy * 0.004, -1.2, 1.2);
+                } else {
+                    orbitTarget.theta -= dx * 0.0055;
+                    orbitTarget.phi = clamp(orbitTarget.phi - dy * 0.004, PHI_MIN, PHI_MAX);
 
-                velTheta = lerp(velTheta, (-dx * 0.0055) * 60, 0.35);
-                velPhi = lerp(velPhi, (-dy * 0.004) * 60, 0.35);
+                    velTheta = lerp(velTheta, (-dx * 0.0055) * 60, 0.35);
+                    velPhi = lerp(velPhi, (-dy * 0.004) * 60, 0.35);
+                }
             }
 
             if (cursorEl) {
@@ -3020,7 +3278,11 @@
         }
 
         function onPointerDown(event) {
-            if (event.button !== 0) return;
+            const piloting = ['pilot', 'landing', 'dock'].includes(rocketState.phase);
+            const steerDrag = piloting && event.button === 0 && event.pointerType === 'mouse';
+            const lookDrag = piloting && event.button === 2;
+            if (event.button !== 0 && !lookDrag) return;
+            if (lookDrag) event.preventDefault();
 
             setPointerFromEvent(event);
 
@@ -3031,15 +3293,23 @@
             }
 
             dragging = true;
+            mouseSteerDragging = steerDrag && event.pointerType === 'mouse';
+            flightLookDragging = lookDrag;
             travel = 0;
             downX = event.clientX;
             downY = event.clientY;
+            if (mouseSteerDragging) {
+                mouseSteerStartYaw = rocketState.yaw;
+                mouseSteerStartPitch = rocketState.pitch;
+            }
+            downButton = event.button;
             downTime = performance.now();
             idleTime = 0;
             velTheta = 0;
             velPhi = 0;
 
-            gsap.killTweensOf(orbitTarget);
+            if (!flightLookDragging) gsap.killTweensOf(orbitTarget);
+            if (mouseSteerDragging) updateMouseSteer(event);
 
             cursorEl?.classList.add('is-down');
 
@@ -3053,11 +3323,13 @@
 
             if (!dragging) return;
             dragging = false;
+            resetMouseSteer();
+            flightLookDragging = false;
 
             const quick = performance.now() - downTime < 500;
             const still = travel < 6 && Math.hypot(event.clientX - downX, event.clientY - downY) < 6;
 
-            if (quick && still) handleTap();
+            if (quick && still && downButton === 0) handleTap();
 
             if (event.pointerType === 'touch') {
                 inside = false;
@@ -3067,7 +3339,13 @@
 
         function onPointerCancel() {
             dragging = false;
+            resetMouseSteer();
+            flightLookDragging = false;
             cursorEl?.classList.remove('is-down');
+        }
+
+        function onContextMenu(event) {
+            if (['pilot', 'landing', 'dock'].includes(rocketState.phase)) event.preventDefault();
         }
 
         // Shift + wheel (or trackpad pinch) zooms without hijacking page scroll.
@@ -3091,23 +3369,6 @@
             const tag = event.target?.tagName;
             if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
 
-            const kn = event.key === ' ' ? 'space' : event.key.toLowerCase();
-            keys[kn] = true;
-            if (rocketState.phase === 'pilot' || rocketState.phase === 'landing') {
-                if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(event.key.toLowerCase())) event.preventDefault();
-            }
-
-            if (event.key === 'l' || event.key === 'L') {
-                const rs = rocketState;
-                if (rs.phase === 'pilot' || rs.phase === 'landing') {
-                    if (nearSite) dockTo(nearSite);
-                    else setReadout('NO SITE IN RANGE', 'FLY CLOSER TO A PLANET OR THE HOME PAD');
-                } else if (rs.phase === 'idle') launchRocket();
-                return;
-            }
-
-            if (event.key === 'e' || event.key === 'E') { if (nearSite && nearSite.url) openSite(nearSite); return; }
-
             const index = ['1', '2', '3', '4'].indexOf(event.key);
             if (index > -1) changeView(viewNames[index]);
         }
@@ -3116,13 +3377,14 @@
         root.addEventListener('pointerenter', onPointerEnter);
         root.addEventListener('pointerleave', onPointerLeave);
         mount.addEventListener('pointerdown', onPointerDown);
+        mount.addEventListener('contextmenu', onContextMenu);
         mount.addEventListener('wheel', onWheel, { passive: false });
         window.addEventListener('pointerup', onPointerUp);
         window.addEventListener('pointercancel', onPointerCancel);
-        function onKeyUp(event) { keys[event.key === ' ' ? 'space' : event.key.toLowerCase()] = false; }
-        function onBlur() { for (const k in keys) keys[k] = false; }
+        function onBlur() {
+            resetMouseSteer();
+        }
         window.addEventListener('keydown', onKeyDown);
-        window.addEventListener('keyup', onKeyUp);
         window.addEventListener('blur', onBlur);
 
         // =====================================================================
@@ -3357,9 +3619,15 @@
                     _dir.set(0, 1, 0).applyQuaternion(ps.aim);
                     _tail.copy(rocket.position).addScaledVector(_dir, -9).add(_p.set(0, 3.2, 0));
                     ps.camPos.lerp(_tail, 1 - Math.exp(-dt * 3));
-                    camera.position.lerp(ps.camPos, pilotBlend);
+                    _flightTarget.copy(rocket.position).addScaledVector(_dir, 5);
+                    _flightOffset.copy(ps.camPos).sub(_flightTarget);
+                    _flightOffset.applyAxisAngle(_Y, flightOrbitTheta);
+                    _flightRight.crossVectors(_Y, _flightOffset).normalize();
+                    _flightOffset.applyAxisAngle(_flightRight, flightOrbitPhi);
+                    _flightPosition.copy(_flightTarget).add(_flightOffset);
+                    camera.position.lerp(_flightPosition, pilotBlend);
                     camera.position.y = Math.max(camera.position.y, -2.4);
-                    _look.lerp(_tail.copy(rocket.position).addScaledVector(_dir, 5), pilotBlend);
+                    _look.lerp(_flightTarget, pilotBlend);
                     camera.lookAt(_look);
                 }
             }
@@ -3633,11 +3901,11 @@
             root.removeEventListener('pointerenter', onPointerEnter);
             root.removeEventListener('pointerleave', onPointerLeave);
             mount.removeEventListener('pointerdown', onPointerDown);
+            mount.removeEventListener('contextmenu', onContextMenu);
             mount.removeEventListener('wheel', onWheel);
             window.removeEventListener('pointerup', onPointerUp);
             window.removeEventListener('pointercancel', onPointerCancel);
             window.removeEventListener('keydown', onKeyDown);
-            window.removeEventListener('keyup', onKeyUp);
             window.removeEventListener('blur', onBlur);
             document.removeEventListener('visibilitychange', onVisibilityChange);
 
