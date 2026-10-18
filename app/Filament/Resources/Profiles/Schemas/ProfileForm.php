@@ -4,8 +4,8 @@ namespace App\Filament\Resources\Profiles\Schemas;
 
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
@@ -26,7 +26,13 @@ class ProfileForm
                     ->default(null)
                     ->columnSpanFull(),
                 FileUpload::make('profile_image')
-                    ->image(),
+                    ->label('Landing page profile picture')
+                    ->image()
+                    ->disk('public')
+                    ->directory('profile-images')
+                    ->visibility('public')
+                    ->imageEditor()
+                    ->helperText('Shown in the landing page hero. Use a square portrait for the best fit.'),
                 FileUpload::make('cover_image')
                     ->image(),
                 TextInput::make('email')

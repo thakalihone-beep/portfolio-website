@@ -87,8 +87,15 @@
 
     <main class="cathedral-intro">
         <div class="intro-overline">
+            @if ($profile?->profile_image)
+                <span class="profile-portrait-frame">
+                    <img class="profile-portrait" src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($profile->profile_image) }}" alt="Portrait of {{ $profile->name }}">
+                </span>
+            @else
+                <span class="profile-portrait-frame profile-portrait-placeholder" aria-hidden="true">RG</span>
+            @endif
             <span class="overline-line"></span>
-            <span>ROSHAN GAUCHAN</span>
+            <span>{{ $profile?->name ?? 'ROSHAN GAUCHAN' }}</span>
             <span class="overline-coordinate">27°42' N / 85°19' E</span>
         </div>
 
@@ -540,6 +547,42 @@
         gap: 12px;
         color: var(--orange);
         margin-bottom: 28px;
+    }
+
+    .profile-portrait-frame {
+        position: relative;
+        display: grid;
+        flex: 0 0 58px;
+        width: 58px;
+        height: 58px;
+        place-items: center;
+        overflow: hidden;
+        border: 1px solid rgba(255,120,46,.72);
+        border-radius: 50%;
+        background: rgba(13,16,18,.72);
+        box-shadow: 0 0 0 5px rgba(255,120,46,.08), 0 0 28px rgba(255,120,46,.2);
+    }
+
+    .profile-portrait-frame::after {
+        position: absolute;
+        inset: 4px;
+        border: 1px solid rgba(238,234,226,.22);
+        border-radius: 50%;
+        content: "";
+        pointer-events: none;
+    }
+
+    .profile-portrait {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-portrait-placeholder {
+        color: var(--orange);
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -.08em;
     }
 
     .overline-line {
@@ -1043,6 +1086,12 @@
         .intro-overline {
             font-size: 8px;
             margin-bottom: 24px;
+        }
+
+        .profile-portrait-frame {
+            flex-basis: 48px;
+            width: 48px;
+            height: 48px;
         }
 
         .overline-coordinate {

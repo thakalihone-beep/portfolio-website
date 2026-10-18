@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
 use App\Models\ContactMessage;
+use App\Models\Profile;
 use App\Models\Project;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -13,7 +14,11 @@ class PageController extends Controller
 {
     public function index(): View
     {
-        return view('frontend.portfolio-rocket');
+        $profile = Profile::query()
+            ->where('is_active', true)
+            ->first();
+
+        return view('frontend.portfolio-rocket', compact('profile'));
     }
 
     public function about(): View
